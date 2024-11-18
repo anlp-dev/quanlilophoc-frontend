@@ -28,8 +28,12 @@ export default function OptionsMenu() {
     };
     const handleLogout = () => {
         localStorage.removeItem('token');
-        navigate('/login');
+        navigate('/');
+    };
+    const handleClickProfile = () => {
+        navigate('/profile')
     }
+
     return (
         <React.Fragment>
             <MenuButton
@@ -59,7 +63,7 @@ export default function OptionsMenu() {
                     },
                 }}
             >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
+                <MenuItem onClick={handleClickProfile}>Profile</MenuItem>
                 <MenuItem onClick={handleClose}>My account</MenuItem>
                 <Divider />
                 <MenuItem onClick={handleClose}>Add another account</MenuItem>

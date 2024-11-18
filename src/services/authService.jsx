@@ -1,4 +1,4 @@
-import { jwtDecode } from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode';
 import apiConfig from "../configs/apiConfig.jsx";
 
 const authService = {
@@ -11,7 +11,7 @@ const authService = {
             body: JSON.stringify({username, password}),
         })
 
-        if(!res.ok){
+        if (!res.ok) {
             if (!res.ok) {
                 if (res.status === 401) {
                     throw new Error('Sai tên đăng nhập hoặc mật khẩu');
@@ -28,28 +28,32 @@ const authService = {
         return data.token;
     },
 
-    async signup(data_req){
-        try{
+    async signup(data_req) {
+        try {
             const username = data_req.get('username');
             const password = data_req.get('password');
             const fullname = data_req.get('name');
             const email = data_req.get('email');
             const roleId = data_req.get('roleId');
-            const res = await fetch(`${apiConfig.baseUrl}/auth/register`,{
+            const res = await fetch(`${apiConfig.baseUrl}/auth/register`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({username, password, fullname, email, roleId}),
             })
-            if(!res.ok){
+            if (!res.ok) {
                 throw new Error('Đăng kí thất bại !');
             }
             const data = await res.json();
             console.log(data);
             return data;
-        }catch (e){
+        } catch (e) {
             throw new Error(e);
         }
-    }
+    },
+    isAuthenticated() {
+        const token = localStorage.getItem('token');
+        return !!token;
+    },
 }
 
 export default authService;

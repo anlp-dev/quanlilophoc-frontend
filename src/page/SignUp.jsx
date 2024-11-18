@@ -224,7 +224,7 @@ const SignUp = () => {
                 setMessNotification('Đăng ký thành công!');
                 setIsLoading(true);
                 setTimeout(() => {
-                    navigate("/login");
+                    navigate("/");
                 }, 3000);
             }
         } catch (e) {
@@ -424,7 +424,7 @@ const SignUp = () => {
                         <Typography sx={{textAlign: 'center'}}>
                             Already have an account?{' '}
                             <Link
-                                href="/login"
+                                href="/"
                                 variant="body2"
                                 sx={{alignSelf: 'center'}}
                             >
