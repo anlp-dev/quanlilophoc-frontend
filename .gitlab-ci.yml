@@ -6,6 +6,7 @@ stages:
 build:
     stage: build
     script:
+        - git clone $CI_REPOSITORY_URL
         - whoami
         - pwd
         - ls
