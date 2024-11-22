@@ -9,6 +9,8 @@ import Profile from "./page/Profile.jsx";
 import Main from "./page/Main.jsx";
 import Class from "./page/Class.jsx";
 import Dashboard from "./page/Dashboard.jsx";
+import NotFoundPage from "./page/404.jsx";
+import AccessDeniedPage from "./page/403.jsx";
 
 function App() {
 
@@ -20,7 +22,10 @@ function App() {
                     <Route path="/signup" element={<SignUp />} />
                     <Route path="/" element={<Login />} />
 
+
                     <Route element={<PrivateRoute />}>
+                        <Route path="/404" element={<NotFoundPage/>}/>
+                        <Route path="/403" element={<AccessDeniedPage/>}/>
                         <Route element={<Main />}>
                             <Route path="/home" element={<Home />} />
                             <Route path="/profile" element={<Profile />} />

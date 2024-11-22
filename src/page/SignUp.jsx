@@ -146,18 +146,7 @@ const SignUp = () => {
         const name = document.getElementById('name');
         const repassword = document.getElementById('repassword');
         const username = document.getElementById('username');
-        const roleSe = document.getElementById('roleSe');
         let isValid = true;
-
-
-        // if(!roleSe.value){
-        //     setRoleErrorMessage('Không được để trống phần này');
-        //     setRoleError(true);
-        //     isValid = false;
-        // }else{
-        //     setRoleErrorMessage('');
-        //     setRoleError(false);
-        // }
 
         if (!username.value) {
             setUserNameError(true);
@@ -218,6 +207,11 @@ const SignUp = () => {
         }
         const data = new FormData(event.currentTarget);
         try {
+            if (!validateInputs()) {
+                return;
+            }
+
+
             const res_signin = await authService.signup(data);
             if (res_signin) {
                 setOpenNotification(true)

@@ -20,6 +20,7 @@ import {useNavigate} from "react-router-dom";
 import Snackbar from '@mui/material/Snackbar';
 import {CircularProgress} from "@mui/material";
 import ReactLoading from 'react-loading';
+import {MESSAGE} from '../enums/message.jsx'
 
 const fadeIn = keyframes(`from {
         opacity: 0;
@@ -118,14 +119,14 @@ const Login = () => {
             const res_login = await authService.login(data);
             if(res_login){
                 localStorage.setItem('token', res_login);
-                setMessLogin('Đăng nhập thành công !');
+                setMessLogin(MESSAGE.LOGIN_SUCCESS);
                 setOpenMess(true);
                 setIsLoading(true);
                 setTimeout(() => {
                     navigate("/home");
                 }, 3000)
             }else{
-                throw new Error('Đăng nhập lỗi!')
+                throw new Error(MESSAGE.LOGIN_ERROR)
             }
         }catch (e){
             setMessLogin(e.message)

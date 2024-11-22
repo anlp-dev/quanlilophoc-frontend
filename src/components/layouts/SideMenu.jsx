@@ -31,6 +31,7 @@ const Drawer = styled(MuiDrawer)({
 export default function SideMenu() {
     const [user, setUser] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [role, setRole] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -53,6 +54,7 @@ export default function SideMenu() {
                     const data = await res.json();
                     setUser(data.data);
                     setIsAuthenticated(true);
+                    setRole(data.data.roleId.code)
 
 
                 } catch (error) {
@@ -79,7 +81,7 @@ export default function SideMenu() {
         >
 
             <Divider />
-            <MenuContent />
+            <MenuContent role={role}/>
             <Stack
                 direction="row"
                 sx={{
