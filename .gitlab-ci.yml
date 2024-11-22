@@ -11,3 +11,12 @@ build:
         - npm run build
     tags:
         - gitlabserver
+
+deploy:
+    stage: deploy
+    script:
+        - npm install
+        - npm run build
+        - scp -r build/* user@staging_server:/var/www/html/
+    tags:
+        - gitlabserver
