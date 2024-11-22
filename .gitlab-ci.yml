@@ -5,21 +5,15 @@ stages:
 
 build:
     stage: build
-    variables:
-        GIT_STRATEGY: clone
     script:
-        - node -v
-        - npm install 
+        - npm install
         - npm run build
     tags:
         - gitlabserver
 
 deploy:
     stage: deploy
-    variables:
-        GIT_STRATEGY: none
     script:
-        - npm install
         - npm run build
         - scp -r build/* anlp@192.168.124.88:/var/www/html/
     tags:
