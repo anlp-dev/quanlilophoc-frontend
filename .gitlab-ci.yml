@@ -12,7 +12,6 @@ build:
         - source ~/.bashrc 
         - nvm install 20
         - nvm use 20 
-        - cd /home/gitlab-runner/frontend 
         - npm install 
         - npm run build 
     tags:
