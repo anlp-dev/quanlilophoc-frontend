@@ -15,6 +15,6 @@ deploy:
     stage: deploy
     script:
         - npm run build
-        - scp -r build/* anlp@192.168.124.88:/var/www/html/
+        - scp -r -o StrictHostKeyChecking=accept-new build/* anlp@192.168.124.88:/var/www/html/
     tags:
         - gitlabserver
