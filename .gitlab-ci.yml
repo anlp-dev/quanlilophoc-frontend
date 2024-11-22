@@ -6,6 +6,7 @@ stages:
 build:
     stage: build
     script:
+        - node -v
         - npm install 
         - npm run build
     tags:
