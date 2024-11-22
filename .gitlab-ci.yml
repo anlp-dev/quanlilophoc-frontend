@@ -6,6 +6,7 @@ stages:
 build:
     stage: build
     script:
+        - nvm install 20
         - node -v
         - npm install 
         - npm run build
