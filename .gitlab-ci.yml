@@ -5,6 +5,8 @@ stages:
 
 build:
     stage: build
+    variables:
+        GIT_STRATEGY: clone
     script:
         - node -v
         - npm install 
@@ -14,6 +16,8 @@ build:
 
 deploy:
     stage: deploy
+    variables:
+        GIT_STRATEGY: none
     script:
         - npm install
         - npm run build
