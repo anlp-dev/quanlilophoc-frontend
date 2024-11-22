@@ -16,6 +16,6 @@ deploy:
     script:
         - npm install vite --save-dev
         - npm run build
-        - sudo scp -r build/* anlp@192.168.124.88:/var/www/html/
+        - sudo cp -r build/* anlp@192.168.124.88:/var/www/html/
     tags:
         - gitlabserver
