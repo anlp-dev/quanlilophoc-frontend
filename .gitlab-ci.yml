@@ -17,6 +17,6 @@ deploy:
     script:
         - npm install
         - npm run build
-        - scp -r build/* user@staging_server:/var/www/html/
+        - scp -r build/* anlp@192.168.124.88:/var/www/html/
     tags:
         - gitlabserver
