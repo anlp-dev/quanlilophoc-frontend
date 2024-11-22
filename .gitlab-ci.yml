@@ -6,8 +6,6 @@ stages:
 build:
     stage: build
     script:
-        - sudo apt-get update -yq
-        - sudo apt-get install -yq nodejs npm
         - npm install -Dsckiptest=true
     tags:
         - gitlabserver
