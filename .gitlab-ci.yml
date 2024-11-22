@@ -6,13 +6,6 @@ stages:
 build:
     stage: build
     script:
-        -- apt-get update -yq
-        - apt-get install -yq curl git
-        - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash 
-        - source ~/.bashrc 
-        - nvm install 20
-        - nvm use 20 
         - npm install 
-        - npm run build 
     tags:
         - gitlabserver
