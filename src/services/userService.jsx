@@ -11,10 +11,8 @@ const userService = {
             });
 
             if (!res.ok) {
-
                 const errorData = await res.json(); // Hoặc res.text() tùy theo response
                 console.error("Lỗi server:", errorData);
-
             }
             const data = await res.json();
             return data;
@@ -22,6 +20,7 @@ const userService = {
             throw new Error(e);
         }
     },
+
     async updateUser(data, id) {
         try {
             const token = localStorage.getItem('token');
@@ -30,6 +29,11 @@ const userService = {
                 headers: apiConfig.getAuthHeaders(token),
                 body: JSON.stringify(data)
             })
+            if (!res.ok) {
+                const errorData = await res.json(); // Hoặc res.text() tùy theo response
+                console.error("Lỗi server:", errorData);
+            }
+            return res.json();
         } catch (e) {
             throw new Error(e);
         }

@@ -17,6 +17,10 @@ import {jwtDecode} from 'jwt-decode';
 import apiConfig from '../configs/apiConfig.jsx';
 import ModalProfile from '../components/modals/modalProfile.jsx';
 import AccountProfileInfo from '../components/Profile/AccountProfileInfo.jsx';
+import userService from '../services/userService.jsx'
+import Loading from "../components/loading/Loading.jsx";
+import Notification from "../components/notification/Notification.jsx";
+import {MESSAGE_ERROR, MESSAGE} from "../enums/message.jsx";
 
 // Gradient animation for the avatar border
 const gradientAnimation = keyframes`
@@ -64,24 +68,18 @@ const variants = {
 const Profile = () => {
     const [user, setUser] = useState({});
     const [openModal, setOpenModal] = useState(false);
+    const [openMess, setOpenMess] = useState(false);
+    const [messNotification, setMessNotification] = useState('');
+    const [isLoading, setIsLoading] = React.useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
             const token = localStorage.getItem('token');
             if (token) {
                 try {
-                    const token_decode = jwtDecode(token);
-                    const res = await fetch(`${apiConfig.baseUrl}/auth/account/${token_decode.userId}`, {
-                        method: 'GET',
-                        headers: apiConfig.getAuthHeaders(token),
-                    });
-
-                    if (res.ok) {
-                        const data = await res.json();
-                        setUser(data.data);
-                    } else {
-                        console.error('Error fetching user data');
-                    }
+                    const res = await userService.loadDataUser(token);
+                    const data = await res.data;
+                    setUser(data);
                 } catch (error) {
                     console.error('Network error:', error);
                 }
@@ -91,8 +89,38 @@ const Profile = () => {
         fetchData();
     }, []);
 
+    const refreshProfile = async () => {
+        const token = localStorage.getItem('token');
+        try{
+            const data = await userService.loadDataUser(token);
+            setUser(data.data);
+            setOpenMess(true)
+            setMessNotification(MESSAGE.UPDATE_PROFILE);
+            setIsLoading(true);
+            setTimeout(() => {
+                setOpenMess(false)
+                setMessNotification('');
+                setIsLoading(false);
+            }, 500);
+        }catch (e) {
+            setOpenMess(true)
+            setMessNotification(MESSAGE_ERROR.UPDATE_PROFILE);
+            setIsLoading(true);
+            setTimeout(() => {
+                setOpenMess(false)
+                setMessNotification('');
+                setIsLoading(false);
+            }, 500);
+            console.error('Network error:', e);
+        }
+    };
+
     const handleOpenClick = () => {
         setOpenModal(true);
+    };
+
+    const handleClose = () => {
+        setOpenMess(false);
     };
 
     return (
@@ -108,6 +136,16 @@ const Profile = () => {
                 boxShadow: '0 6px 18px rgba(0, 0, 0, 0.1)',
             }}
         >
+            {isLoading &&
+                <>
+                    <Loading/>
+                </>}
+            <Notification
+                open={openMess}
+                message={messNotification}
+                onClose={handleClose}
+            />
+
             <Grid container spacing={5} justifyContent="center">
                 {/* Avatar Section */}
                 <Grid
@@ -135,6 +173,7 @@ const Profile = () => {
                     </Typography>
                 </Grid>
 
+
                 {/* User Information Section */}
                 <Grid item xs={12} md={8}>
                     <Card
@@ -154,7 +193,7 @@ const Profile = () => {
                             <Divider sx={{mb: 2}} />
                             <AccountProfileInfo account={user} />
                         </CardContent>
-                        <CardActions sx={{justifyContent: 'center'}}>
+                        <CardActions sx={{justifyContent: 'center', marginBottom: 1}}>
                             <motion.div whileHover={{scale: 1.05}}>
                                 <StyledButton onClick={() => handleOpenClick()}>
                                     Chỉnh sửa hồ sơ
@@ -163,6 +202,7 @@ const Profile = () => {
                                     openData={openModal}
                                     onClose={() => setOpenModal(false)}
                                     account={user}
+                                    onUpdate={refreshProfile}
                                 />
                             </motion.div>
                         </CardActions>

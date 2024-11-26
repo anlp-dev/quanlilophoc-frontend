@@ -23,6 +23,8 @@ import Grid from '@mui/material/Grid';
 import authService from "../services/authService.jsx";
 import {useNavigate} from "react-router-dom";
 import {useEffect} from "react";
+import Loading from "../components/loading/Loading.jsx";
+import Notification from "../components/notification/Notification.jsx";
 
 const fadeIn = keyframes(`from {
         opacity: 0;
@@ -219,7 +221,7 @@ const SignUp = () => {
                 setIsLoading(true);
                 setTimeout(() => {
                     navigate("/");
-                }, 3000);
+                }, 500);
             }
         } catch (e) {
             setOpenNotification(true)
@@ -233,31 +235,14 @@ const SignUp = () => {
             <CssBaseline enableColorScheme/>
             <SignInContainer direction="column" justifyContent="space-between">
                 <Card variant="outlined">
-                    {isLoading && (
-                        <Box
-                            sx={{
-                                position: 'fixed',
-                                top: 0,
-                                left: 0,
-                                width: '100%',
-                                height: '100%',
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                backgroundColor: 'rgba(0, 0, 0, 0.5)', // Nền mờ
-                                zIndex: 1000, // Đảm bảo loading hiển thị trên cùng
-                            }}
-                        >
-                            {/*<CircularProgress size={40}/>*/}
-                            <ReactLoading type="bars" color="#fff" height={100} width={100}/>
-                        </Box>
-                    )}
-                    <Snackbar
-                        anchorOrigin={{vertical: 'top', horizontal: 'right'}}
+                    {isLoading &&
+                        <>
+                            <Loading/>
+                        </>}
+                    <Notification
                         open={openNotification}
-                        onClose={handleClose}
                         message={messNotification}
-                        autoHideDuration={3000}
+                        onClose={handleClose}
                     />
                     <Typography
                         component="h1"

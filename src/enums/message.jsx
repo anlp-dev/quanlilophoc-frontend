@@ -3,6 +3,7 @@ export const MESSAGE = {
     LOGIN_FAIL: 'Sai tên đăng nhập hoặc mật khẩu !!!',
     LOGIN_ERROR: 'Đăng nhập lỗi !!!',
     SIGNIN_SUCCESS: 'Đăng ký tài khoản thành công !!!',
+    UPDATE_PROFILE: 'Cập nhật thông tin của bạn thành công !!!',
 }
 
 export const MESSAGE_ERROR = {
@@ -12,4 +13,5 @@ export const MESSAGE_ERROR = {
     PHONE_REQUIRED: 'Vui lòng không để trống giới tính!!!',
     DOB_REQUIRED: 'Vui lòng không để trống ngày sinh!!!',
     GENDER_REQUIRED: 'Vui lòng không để trống giới tính!!!',
+    UPDATE_PROFILE: 'Cập nhật thông tin của bạn lỗi !!!',
 }

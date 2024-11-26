@@ -11,6 +11,7 @@ import Class from "./page/Class.jsx";
 import Dashboard from "./page/Dashboard.jsx";
 import NotFoundPage from "./page/404.jsx";
 import AccessDeniedPage from "./page/403.jsx";
+import Account from "./page/Account.jsx";
 
 function App() {
 
@@ -31,6 +32,7 @@ function App() {
                             <Route path="/profile" element={<Profile />} />
                             <Route path="/class" element={<Class/>}/>
                             <Route path="/dashboard" element={<Dashboard/>}/>
+                            <Route path="/settings/account" element={<Account />}/>
                         </Route>
                     </Route>
                 </Routes>

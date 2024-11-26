@@ -75,7 +75,7 @@ const secondaryListItems = [
         icon: <SettingsRoundedIcon/>,
         children: [
             {text: 'Tài khoản', link: '/settings/account'},
-            {text: 'Thông báo', link: '/settings/notification'},
+            {text: 'Thông báo', link: '/404'},
         ]
     },
     {text: 'About', icon: <InfoRoundedIcon/>},

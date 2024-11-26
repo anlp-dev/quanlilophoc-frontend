@@ -16,6 +16,7 @@ import {
 import {Person as PersonIcon} from '@mui/icons-material';
 import {validateFormModal} from '../../utils/validate.jsx';
 import userService from '../../services/userService.jsx'
+import {MESSAGE_ERROR, MESSAGE} from "../../enums/message.jsx";
 
 const style = {
     position: 'absolute',
@@ -30,7 +31,7 @@ const style = {
     textAlign: 'center',
 };
 
-const ModalProfile = ({openData, onClose, account}) => {
+const ModalProfile = ({openData, onClose, account, onUpdate}) => {
     const [fullname, setFullname] = useState(account?.fullname || '');
     const [email, setEmail] = useState(account?.email || '');
     const [phone, setPhone] = useState(account?.teacherId?.phoneNumber || account?.studentId?.phoneNumber || '');
@@ -39,6 +40,7 @@ const ModalProfile = ({openData, onClose, account}) => {
     const [dateOfBirth, setDateOfBirth] = useState(account?.teacherId?.dateOfBirth || account?.studentId?.dateOfBirth || '');
     const [formError, setFormError] = useState({});
 
+
     useEffect(() => {
         setFullname(account?.fullname || '');
         setEmail(account?.email || '');
@@ -46,7 +48,7 @@ const ModalProfile = ({openData, onClose, account}) => {
         setAddress(account?.teacherId?.address || account?.studentId?.address || '');
         setGender(account?.teacherId?.gender || account?.studentId?.gender || '');
         if (account?.teacherId?.dateOfBirth || account?.studentId?.dateOfBirth) {
-            setDateOfBirth(new Date(account?.teacherId?.dateOfBirth || account?.studentId?.dateOfBirth));
+            setDateOfBirth(new Date(account?.teacherId?.dateOfBirth || account?.studentId?.dateOfBirth).toLocaleDateString('en-CA'));
         }
     }, [account]);
 
@@ -61,21 +63,24 @@ const ModalProfile = ({openData, onClose, account}) => {
                 gender,
                 dateOfBirth,
             };
-            console.log(updatedData)
             const errors = validateFormModal(updatedData);
             if (Object.keys(errors).length > 0) {
                 setFormError(errors);
                 return;
             }
+            const response = await userService.updateUser(updatedData, account?._id);
+            if(response.status === 200){
+                onUpdate();
+                    onClose();
+            }else{
 
-
-            await userService.updateUser(updatedData, account?._id);
+            }
         } catch (e) {
             throw new Error(e);
         }
-
-        onClose(); // Close the modal after saving
     };
+
+    const isFormIncomplete = !fullname || !email || !phone || !address || !gender || !dateOfBirth;
 
     return (
         <Modal
@@ -153,9 +158,9 @@ const ModalProfile = ({openData, onClose, account}) => {
                                 variant="outlined"
                             >
                                 <MenuItem value="">Chọn giới tính</MenuItem>
-                                <MenuItem value="male">Nam</MenuItem>
-                                <MenuItem value="female">Nữ</MenuItem>
-                                <MenuItem value="other">Khác</MenuItem>
+                                <MenuItem value="Nam">Nam</MenuItem>
+                                <MenuItem value="Nữ">Nữ</MenuItem>
+                                <MenuItem value="Khác">Khác</MenuItem>
                             </Select>
                             <FormHelperText>{!!formError.gender_error ? formError.gender_error : 'Chọn giới tính'}</FormHelperText>
                         </FormControl>
@@ -208,6 +213,7 @@ const ModalProfile = ({openData, onClose, account}) => {
                                 backgroundColor: '#1565c0',
                             },
                         }}
+                        disabled={isFormIncomplete}
                     >
                         Lưu
                     </Button>
