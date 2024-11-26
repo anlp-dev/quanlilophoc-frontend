@@ -4,3 +4,12 @@ export const MESSAGE = {
     LOGIN_ERROR: 'Đăng nhập lỗi !!!',
     SIGNIN_SUCCESS: 'Đăng ký tài khoản thành công !!!',
 }
+
+export const MESSAGE_ERROR = {
+    FULLNAME_REQUIRED: 'Vui lòng không để trống họ và tên!!!',
+    EMAIL_REQUIRED: 'Vui lòng không để trống email!!!',
+    ADDRESS_REQUIRED: 'Vui lòng không để trống địa chỉ!!!',
+    PHONE_REQUIRED: 'Vui lòng không để trống giới tính!!!',
+    DOB_REQUIRED: 'Vui lòng không để trống ngày sinh!!!',
+    GENDER_REQUIRED: 'Vui lòng không để trống giới tính!!!',
+}

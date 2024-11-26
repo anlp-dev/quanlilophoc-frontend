@@ -1,52 +1,69 @@
 import React, {useEffect, useState} from 'react';
-import {Grid, Typography, Avatar, Button, List, ListItem, ListItemText, Divider} from '@mui/material';
+import {
+    Grid,
+    Typography,
+    Avatar,
+    Button,
+    Divider,
+    Card,
+    CardContent,
+    CardActions,
+    Box,
+} from '@mui/material';
 import {motion} from 'framer-motion';
-import {styled} from '@mui/material/styles'; // Import styled từ Material UI
+import {styled} from '@mui/material/styles';
 import {keyframes} from '@emotion/react';
-import {jwtDecode} from "jwt-decode";
-import apiConfig from "../configs/apiConfig.jsx";
-import ModalProfile from "../components/modals/modalProfile.jsx";
-import AccountProfileInfo from "../components/Profile/AccountProfileInfo.jsx"; // Import keyframes từ emotion
+import {jwtDecode} from 'jwt-decode';
+import apiConfig from '../configs/apiConfig.jsx';
+import ModalProfile from '../components/modals/modalProfile.jsx';
+import AccountProfileInfo from '../components/Profile/AccountProfileInfo.jsx';
 
-
-const rotateAnimation = keyframes`
-    from {
-        transform: rotate(0deg);
+// Gradient animation for the avatar border
+const gradientAnimation = keyframes`
+    0% {
+        border-color: #ff7eb3;
     }
-    to {
-        transform: rotate(360deg);
+    50% {
+        border-color: #ff758c;
+    }
+    100% {
+        border-color: #ff7eb3;
     }
 `;
 
-
+// Styled Avatar
 const StyledAvatar = styled(Avatar)(({theme}) => ({
     width: 200,
     height: 200,
-    border: '4px solid #fff',
-    boxShadow: theme.shadows[5],
-    animation: `${rotateAnimation} 2s linear infinite`,
+    border: '6px solid',
+    borderColor: '#ff758c',
+    animation: `${gradientAnimation} 3s linear infinite`,
+    boxShadow: '0 4px 15px rgba(255, 117, 140, 0.5)',
 }));
 
-
+// Styled Button
 const StyledButton = styled(Button)(({theme}) => ({
-    backgroundColor: '#007bff',
+    background: 'linear-gradient(45deg, #ff758c, #ff7eb3)',
     color: '#fff',
+    padding: '10px 20px',
+    fontWeight: 'bold',
+    textTransform: 'none',
+    borderRadius: '30px',
+    boxShadow: '0 4px 12px rgba(255, 117, 140, 0.5)',
     '&:hover': {
-        backgroundColor: '#0069d9',
-        boxShadow: theme.shadows[8],
-    }
+        background: 'linear-gradient(45deg, #ff7eb3, #ff758c)',
+    },
 }));
 
+// Motion animation variants
 const variants = {
     hidden: {opacity: 0, y: 20},
-    visible: {opacity: 1, y: 0, transition: {duration: 0.5}},
+    visible: {opacity: 1, y: 0, transition: {duration: 0.6}},
 };
 
 const Profile = () => {
     const [user, setUser] = useState({});
-    const [loading, setLoading] = useState(false);
     const [openModal, setOpenModal] = useState(false);
-
 
     useEffect(() => {
         const fetchData = async () => {
@@ -56,72 +73,104 @@ const Profile = () => {
                     const token_decode = jwtDecode(token);
                     const res = await fetch(`${apiConfig.baseUrl}/auth/account/${token_decode.userId}`, {
                         method: 'GET',
-                        headers: apiConfig.getAuthHeaders(token)
+                        headers: apiConfig.getAuthHeaders(token),
                     });
 
-                    if (!res.ok) {
-                        const errorData = await res.json(); // Hoặc res.text() tùy theo response
-                        console.error("Lỗi server:", errorData);
+                    if (res.ok) {
+                        const data = await res.json();
+                        setUser(data.data);
+                    } else {
+                        console.error('Error fetching user data');
                     }
-                    const data = await res.json();
-                    setUser(data.data);
-
-
                 } catch (error) {
-                    console.error("Lỗi network:", error);
+                    console.error('Network error:', error);
                 }
             }
         };
 
         fetchData();
-
     }, []);
-
 
     const handleOpenClick = () => {
         setOpenModal(true);
     };
 
-
     return (
-        <>
-            <motion.div
-                initial="hidden"
-                animate="visible"
-                variants={variants}
-                style={{
-                    padding: '2rem',
-                    backgroundColor: '#f5f5f5',
-                    borderRadius: '10px',
-                    boxShadow: '0px 2px 5px rgba(0, 0, 0, 0.1)'
-                }}
-            >
-                <Grid container spacing={5}>
-                    <Grid item xs={12} md={3} sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                        <motion.div whileHover={{scale: 1.1}}>
-                            <StyledAvatar alt="Tên người dùng" src="/avatar.jpg"/>
-                        </motion.div>
-                        <Typography variant="h4"
-                                    sx={{color: '#333', textAlign: 'center', mt: 2}}>{user.fullname}</Typography>
-                        <Typography variant="subtitle1"
-                                    sx={{color: '#666', textAlign: 'center', mb: 2}}>{user.email}</Typography>
-                    </Grid>
-                    <Grid item xs={12} md={7}>
-                        <Typography variant="h6" sx={{color: '#555', mb: 1}}>Thông tin người dùng</Typography>
-                        <Divider sx={{mb: 2}}/>
-                        <AccountProfileInfo account={user}/>
-                        <motion.div whileHover={{scale: 1.05}}>
-                            <StyledButton variant="contained" sx={{mt: 2}} onClick={() => handleOpenClick()}>
-                                Chỉnh sửa hồ sơ
-                            </StyledButton>
-                            <ModalProfile openData={openModal} onClose={() => setOpenModal(false)}/>
-                        </motion.div>
-                    </Grid>
+        <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={variants}
+            style={{
+                padding: '2rem',
+                background: 'linear-gradient(135deg, #fdfcfb, #e2d1c3)',
+                borderRadius: '0px',
+                height: '122%',
+                boxShadow: '0 6px 18px rgba(0, 0, 0, 0.1)',
+            }}
+        >
+            <Grid container spacing={5} justifyContent="center">
+                {/* Avatar Section */}
+                <Grid
+                    item
+                    xs={12}
+                    md={4}
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        textAlign: 'center',
+                    }}
+                >
+                    <motion.div whileHover={{scale: 1.1}}>
+                        <StyledAvatar alt={user.fullname} src="/avatar.jpg" />
+                    </motion.div>
+                    <Typography
+                        variant="h4"
+                        sx={{color: '#333', fontWeight: 'bold', mt: 2}}
+                    >
+                        {user.fullname}
+                    </Typography>
+                    <Typography variant="subtitle1" sx={{color: '#777', mb: 2}}>
+                        {user.email}
+                    </Typography>
                 </Grid>
-            </motion.div>
 
-        </>
+                {/* User Information Section */}
+                <Grid item xs={12} md={8}>
+                    <Card
+                        sx={{
+                            background: 'linear-gradient(145deg, #ffffff, #f0f0f0)',
+                            boxShadow: '0 8px 16px rgba(0, 0, 0, 0.1)',
+                            borderRadius: '15px',
+                        }}
+                    >
+                        <CardContent>
+                            <Typography
+                                variant="h6"
+                                sx={{color: '#555', fontWeight: 'bold', mb: 2}}
+                            >
+                                Thông tin người dùng
+                            </Typography>
+                            <Divider sx={{mb: 2}} />
+                            <AccountProfileInfo account={user} />
+                        </CardContent>
+                        <CardActions sx={{justifyContent: 'center'}}>
+                            <motion.div whileHover={{scale: 1.05}}>
+                                <StyledButton onClick={() => handleOpenClick()}>
+                                    Chỉnh sửa hồ sơ
+                                </StyledButton>
+                                <ModalProfile
+                                    openData={openModal}
+                                    onClose={() => setOpenModal(false)}
+                                    account={user}
+                                />
+                            </motion.div>
+                        </CardActions>
+                    </Card>
+                </Grid>
+            </Grid>
+        </motion.div>
     );
-}
+};
 
 export default Profile;

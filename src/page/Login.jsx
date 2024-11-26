@@ -119,6 +119,7 @@ const Login = () => {
             const res_login = await authService.login(data);
             if(res_login){
                 localStorage.setItem('token', res_login);
+                document.title = 'Đợi một chút ...'
                 setMessLogin(MESSAGE.LOGIN_SUCCESS);
                 setOpenMess(true);
                 setIsLoading(true);

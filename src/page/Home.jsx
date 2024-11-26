@@ -9,125 +9,240 @@ import {
     CardContent,
     CardActions,
     Button,
-    CssBaseline
+    CssBaseline,
+    Box,
+    IconButton,
 } from '@mui/material';
 import { motion } from "framer-motion";
+import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import BarChartIcon from '@mui/icons-material/BarChart';
+import {useEffect, useState} from "react";
+import userService from '../services/userService.jsx'
+import WorkIcon from '@mui/icons-material/Work';
+import TextSnippetIcon from '@mui/icons-material/TextSnippet';
+import ClassIcon from '@mui/icons-material/Class';
+import {ROLE} from "../enums/role.jsx";
 
 const theme = createTheme({
     palette: {
         primary: {
-            main: '#2196f3', // Màu xanh dương
+            main: '#3f51b5', // Gradient xanh tím
         },
         secondary: {
-            main: '#4caf50', // Màu xanh lá cây
+            main: '#ff9800', // Gradient cam
         },
+        background: {
+            default: '#f4f6f8',
+        },
+    },
+    typography: {
+        fontFamily: 'Roboto, Arial',
     },
 });
 
 function Home() {
+    const [user, setUser] = useState({});
+    const [role, setRole] = useState('')
+    useEffect(() => {
+        document.title = 'Quản lí lớp học';
+        const fetchData = async () =>{
+            const token = localStorage.getItem('token');
+            const res_data = await userService.loadDataUser(token);
+            setRole(res_data.data.roleId);
+            setUser(res_data.data);
+        }
+        fetchData();
+    }, []);
+
     return (
         <ThemeProvider theme={theme}>
-            <CssBaseline /> {/* Reset CSS mặc định */}
-            <AppBar position="static">
+            <CssBaseline />
+            <AppBar position="static" sx={{ background: 'linear-gradient(90deg, #3f51b5, #2196f3)' }}>
                 <Toolbar>
-                    <Typography variant="h6" noWrap component="div">
+                    <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
                         Trang chủ
                     </Typography>
                 </Toolbar>
             </AppBar>
-            <Grid container spacing={2} sx={{ mt: 2, px: 2 }}>
-                {/* Thêm margin-top và padding-x */}
-                <Grid item xs={12}>
-                    {/* Nội dung chính */}
-                    <Grid container spacing={3}> {/* Tăng spacing */}
-                        <Grid item xs={12} md={6}>
-                            {/* Thông báo */}
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.5 }}
-                                whileHover={{ scale: 1.02 }} // Thêm hover effect
+            <Grid container spacing={4} sx={{ mt: 0, px: 4 }}>
+                <Grid item xs={12} md={6} lg={3}>
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.6 }}
+                        whileHover={{ scale: 1.05 }}
+                    >
+                        <Card sx={{ boxShadow: 5, borderRadius: 3 }}>
+                            <Box
+                                sx={{
+                                    background: 'linear-gradient(#7FFFD4,  #AFEEEE, #E0FFFF)',
+                                    color: '#fff',
+                                    textAlign: 'center',
+                                    py: 3,
+                                    borderRadius: '12px 12px 0 0',
+                                }}
                             >
-                                <Card>
-                                    <CardContent>
-                                        <Typography variant="h6" component="div">
-                                            {/* Thay đổi variant */}
-                                            Thông báo
-                                        </Typography>
-                                        <Typography variant="body2" color="text.secondary">
-                                            Nội dung thông báo...
-                                        </Typography>
-                                    </CardContent>
-                                    <CardActions>
-                                        <Button size="small" variant="contained" color="primary">
-                                            Xem thêm
-                                        </Button>
-                                    </CardActions>
-                                </Card>
-                            </motion.div>
-                        </Grid>
-                        {/* Các phần khác */}
-                        <Grid item xs={12} md={6}>
-                            {/* Lịch học */}
-                            <motion.div
-                                initial={{ opacity: 0, x: 20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ duration: 0.5 }}
+                                <NotificationsActiveIcon sx={{ fontSize: 50 }} />
+                            </Box>
+                            <CardContent>
+                                <Typography variant="h6" component="div" align="center">
+                                    Thông báo
+                                </Typography>
+                                <Typography variant="body2" color="text.secondary" align="center">
+                                    Nội dung các thông báo quan trọng...
+                                </Typography>
+                            </CardContent>
+                            <CardActions sx={{ justifyContent: 'center' }}>
+                                <Button size="small" variant="contained" color="primary">
+                                    Xem thêm
+                                </Button>
+                            </CardActions>
+                        </Card>
+                    </motion.div>
+                </Grid>
+                <Grid item xs={12} md={6} lg={3}>
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.6 }}
+                        whileHover={{ scale: 1.05 }}
+                    >
+                        <Card sx={{ boxShadow: 5, borderRadius: 3 }}>
+                            <Box
+                                sx={{
+                                    background: 'linear-gradient(#FFDEAD,  #F0E68C, #FFFFF0)',
+                                    color: '#fff',
+                                    textAlign: 'center',
+                                    py: 3,
+                                    borderRadius: '12px 12px 0 0',
+                                }}
                             >
-                                <Card>
-                                    <CardContent>
-                                        <Typography gutterBottom variant="h5" component="div">
-                                            Lịch học
-                                        </Typography>
-                                        {/* Hiển thị lịch học */}
-                                    </CardContent>
-                                    <CardActions>
-                                        <Button size="small" variant="contained" color="primary">Xem chi tiết</Button>
-                                    </CardActions>
-                                </Card>
-                            </motion.div>
-                        </Grid>
-                        <Grid item xs={12}>
-                            {/* Bài tập */}
-                            <motion.div
-                                initial={{ opacity: 0, scale: 0.8 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                transition={{ duration: 0.5 }}
+                                <WorkIcon sx={{ fontSize: 50 }} />
+                            </Box>
+                            <CardContent>
+                                <Typography variant="h6" component="div" align="center">
+                                    Việc cần làm
+                                </Typography>
+                                <Typography variant="body2" color="text.secondary" align="center">
+                                    Những việc được giao trong ngày hôm nay
+                                </Typography>
+                            </CardContent>
+                            <CardActions sx={{ justifyContent: 'center' }}>
+                                <Button size="small" variant="contained" color="primary">
+                                    Xem thêm
+                                </Button>
+                            </CardActions>
+                        </Card>
+                    </motion.div>
+                </Grid>
+
+                <Grid item xs={12} md={6} lg={3}>
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.6 }}
+                        whileHover={{ scale: 1.05 }}
+                    >
+                        <Card sx={{ boxShadow: 5, borderRadius: 3 }}>
+                            <Box
+                                sx={{
+                                    background: 'linear-gradient( #FFC0CB, #EE82EE, #FFF0F5)',
+                                    color: '#fff',
+                                    textAlign: 'center',
+                                    py: 3,
+                                    borderRadius: '12px 12px 0 0',
+                                }}
                             >
-                                <Card>
-                                    <CardContent>
-                                        <Typography gutterBottom variant="h5" component="div">
-                                            Bài tập
-                                        </Typography>
-                                        {/* Hiển thị danh sách bài tập */}
-                                    </CardContent>
-                                    <CardActions>
-                                        <Button size="small" variant="contained" color="primary">Xem tất cả</Button>
-                                    </CardActions>
-                                </Card>
-                            </motion.div>
-                        </Grid>
-                        <Grid item xs={12}>
-                            {/* Thống kê */}
-                            <motion.div
-                                initial={{ opacity: 0, y: -20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.5 }}
+                                <TextSnippetIcon sx={{ fontSize: 50 }} />
+                            </Box>
+                            <CardContent>
+                                <Typography variant="h6" component="div" align="center">
+                                    Bài tập
+                                </Typography>
+                                <Typography variant="body2" color="text.secondary" align="center">
+                                    Những bài tập được giao trong ngày hôm nay
+                                </Typography>
+                            </CardContent>
+                            <CardActions sx={{ justifyContent: 'center' }}>
+                                <Button size="small" variant="contained" color="primary">
+                                    Xem thêm
+                                </Button>
+                            </CardActions>
+                        </Card>
+                    </motion.div>
+                </Grid>
+
+                <Grid item xs={12} md={6} lg={3}>
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.6 }}
+                        whileHover={{ scale: 1.05 }}
+                    >
+                        <Card sx={{ boxShadow: 5, borderRadius: 3 }}>
+                            <Box
+                                sx={{
+                                    background: 'linear-gradient( #D3D3D3, #F5F5F5, #E6E6FA)',
+                                    color: '#fff',
+                                    textAlign: 'center',
+                                    py: 3,
+                                    borderRadius: '12px 12px 0 0',
+                                }}
                             >
-                                <Card>
-                                    <CardContent>
-                                        <Typography gutterBottom variant="h5" component="div">
-                                            Thống kê
-                                        </Typography>
-                                        {/* Hiển thị biểu đồ thống kê */}
-                                    </CardContent>
-                                    <CardActions>
-                                        <Button size="small" variant="contained" color="primary">Xem chi tiết</Button>
-                                    </CardActions>
-                                </Card>
-                            </motion.div>
-                        </Grid>
-                    </Grid>
+                                <ClassIcon sx={{ fontSize: 50 }} />
+                            </Box>
+                            <CardContent>
+                                <Typography variant="h6" component="div" align="center">
+                                    Lớp học
+                                </Typography>
+                                <Typography variant="body2" color="text.secondary" align="center">
+                                    Những lớp học bạn đang tham gia
+                                </Typography>
+                            </CardContent>
+                            <CardActions sx={{ justifyContent: 'center' }}>
+                                <Button size="small" variant="contained" color="primary">
+                                    Xem thêm
+                                </Button>
+                            </CardActions>
+                        </Card>
+                    </motion.div>
+                </Grid>
+                <Grid item xs={12} md={6} lg={3} hidden={role.code !== ROLE.ADMIN}>
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.6 }}
+                        whileHover={{ scale: 1.05 }}
+                    >
+                        <Card sx={{ boxShadow: 5, borderRadius: 3 }}>
+                            <Box
+                                sx={{
+                                    background: 'linear-gradient(  #F08080, #CD5C5C, #FFB6C1)',
+                                    color: '#fff',
+                                    textAlign: 'center',
+                                    py: 3,
+                                    borderRadius: '12px 12px 0 0',
+                                }}
+                            >
+                                <TextSnippetIcon sx={{ fontSize: 50 }} />
+                            </Box>
+                            <CardContent>
+                                <Typography variant="h6" component="div" align="center">
+                                    Quản lí tài khoản
+                                </Typography>
+                                <Typography variant="body2" color="text.secondary" align="center">
+                                    Quản lí hệ thống bởi người quản trị
+                                </Typography>
+                            </CardContent>
+                            <CardActions sx={{ justifyContent: 'center' }}>
+                                <Button size="small" variant="contained" color="primary">
+                                    Xem thêm
+                                </Button>
+                            </CardActions>
+                        </Card>
+                    </motion.div>
                 </Grid>
             </Grid>
         </ThemeProvider>

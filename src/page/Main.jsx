@@ -17,12 +17,8 @@ const Main = () => {
                 component="main"
                 sx={{
                     flexGrow: 1,
-                    p: 3,
-                    backgroundColor: "#f9f9f9",
-                    minHeight: "100vh",
                 }}
             >
-                <Toolbar />
                 <Outlet/>
             </Box>
         </Box>
