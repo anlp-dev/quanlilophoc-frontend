@@ -1,76 +1,174 @@
-import * as React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
-    Avatar,
-    Box,
-    Typography,
     Grid,
+    Typography,
+    Avatar,
+    Button,
+    Divider,
     Card,
     CardContent,
-    Divider
+    CardActions,
+    Box,
 } from '@mui/material';
-import {useEffect, useState} from "react";
-import userService from '../services/userService.jsx'
+import {motion} from 'framer-motion';
+import {styled} from '@mui/material/styles';
+import {keyframes} from '@emotion/react';
+import {jwtDecode} from 'jwt-decode';
+import apiConfig from '../configs/apiConfig.jsx';
+import ModalProfile from '../components/modals/ModalProfile.jsx';
+import AccountProfileInfo from '../components/Profile/AccountProfileInfo.jsx';
+import userService from '../services/UserService.jsx'
+import Loading from "../components/loading/Loading.jsx";
+import Notification from "../components/notification/Notification.jsx";
+import {MESSAGE_ERROR, Message} from "../enums/Message.jsx";
+import Account from "../components/Profile/Account.jsx";
+
+// Styled Button
+const StyledButton = styled(Button)(({theme}) => ({
+    background: 'linear-gradient(45deg, #ff758c, #ff7eb3)',
+    color: '#fff',
+    padding: '10px 20px',
+    fontWeight: 'bold',
+    textTransform: 'none',
+    borderRadius: '30px',
+    boxShadow: '0 4px 12px rgba(255, 117, 140, 0.5)',
+    '&:hover': {
+        background: 'linear-gradient(45deg, #ff7eb3, #ff758c)',
+    },
+}));
+
+// Motion animation variants
+const variants = {
+    hidden: {opacity: 0, y: 20},
+    visible: {opacity: 1, y: 0, transition: {duration: 0.6}},
+};
 
 const Profile = () => {
-    const [user, setUser] = useState('');
+    const [user, setUser] = useState({});
+    const [openModal, setOpenModal] = useState(false);
+    const [openMess, setOpenMess] = useState(false);
+    const [messNotification, setMessNotification] = useState('');
+    const [isLoading, setIsLoading] = React.useState(false);
 
     useEffect(() => {
-        async function fetchData(){
-            try{
-                const token = localStorage.getItem('token')
-                const data = await userService.loadDataUser(token);
-                setUser(data.data);
-            }catch (e) {
-                throw new Error(e);
+        const fetchData = async () => {
+            const token = localStorage.getItem('token');
+            if (token) {
+                try {
+                    const res = await userService.loadDataUser(token);
+                    const data = await res.data;
+                    setUser(data);
+                } catch (error) {
+                    console.error('Network error:', error);
+                }
             }
-        }
-        fetchData();
+        };
 
+        fetchData();
     }, []);
 
+    const refreshProfile = async () => {
+        const token = localStorage.getItem('token');
+        try{
+            const data = await userService.loadDataUser(token);
+            setUser(data.data);
+            setOpenMess(true)
+            setMessNotification(Message.UPDATE_PROFILE);
+            setIsLoading(true);
+            setTimeout(() => {
+                setOpenMess(false)
+                setMessNotification('');
+                setIsLoading(false);
+            }, 500);
+        }catch (e) {
+            setOpenMess(true)
+            setMessNotification(MESSAGE_ERROR.UPDATE_PROFILE);
+            setIsLoading(true);
+            setTimeout(() => {
+                setOpenMess(false)
+                setMessNotification('');
+                setIsLoading(false);
+            }, 500);
+            console.error('Network error:', e);
+        }
+    };
+
+    const handleOpenClick = () => {
+        setOpenModal(true);
+    };
+
+    const handleClose = () => {
+        setOpenMess(false);
+    };
+
     return (
-        <Box sx={{ flexGrow: 1, padding: 3 }}>
-            <Grid container spacing={3}>
-                <Grid item xs={12} md={4}>
-                    <Card>
-                        <CardContent>
-                            <Avatar
-                                alt="Profile Picture"
-                                src="/path/to/your/profile-picture.jpg"
-                                sx={{ width: 150, height: 150, margin: 'auto' }}
-                            />
-                            <Typography gutterBottom variant="h5" component="div" align="center">
-                                {user?.fullname}
-                            </Typography>
-                            <Typography variant="body2" color="text.secondary" align="center">
-                                Software Engineer
-                            </Typography>
-                            <Divider sx={{ my: 2 }} />
-                            <Typography variant="body2" color="text.secondary">
-                                {user?.email}
-                            </Typography>
-                            <Typography variant="body2" color="text.secondary">
-                                {user?.username}
-                            </Typography>
-                        </CardContent>
-                    </Card>
+        <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={variants}
+            style={{
+                padding: '2rem',
+                background: 'linear-gradient(135deg, #fdfcfb, #e2d1c3)',
+                borderRadius: '0px',
+                height: '158%',
+                boxShadow: '0 6px 18px rgba(0, 0, 0, 0.1)',
+            }}
+        >
+            {isLoading &&
+                <>
+                    <Loading/>
+                </>}
+            <Notification
+                open={openMess}
+                message={messNotification}
+                onClose={handleClose}
+            />
+
+            <Grid container spacing={3} justifyContent="center">
+                <Grid
+                    item
+                    xs={12}
+                    md={4}
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        textAlign: 'center',
+                    }}
+                >
+
+                    <Account user={user}/>
                 </Grid>
+
+
+                {/* User Information Section */}
                 <Grid item xs={12} md={8}>
-                    <Card>
-                        <CardContent>
-                            <Typography gutterBottom variant="h5" component="div">
-                                About Me
-                            </Typography>
-                            <Typography variant="body2" color="text.secondary">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                Maecenas sed diam eget risus varius blandit sit amet non magna.
-                                Nulla vitae elit libero, a pharetra augue.
-                            </Typography>
-                        </CardContent>
+                    <Card
+                        sx={{
+                            background: 'linear-gradient(145deg, #ffffff, #f0f0f0)',
+                            boxShadow: '0 8px 16px rgba(0, 0, 0, 0.1)',
+                            borderRadius: '15px',
+                        }}
+                    >
+
+                        <AccountProfileInfo account={user} />
+                        <CardActions sx={{justifyContent: 'right', marginBottom: 1, marginRight: 4}}>
+                            <motion.div whileHover={{scale: 1.05}}>
+                                <StyledButton onClick={() => handleOpenClick()}>
+                                    Chỉnh sửa hồ sơ
+                                </StyledButton>
+                                <ModalProfile
+                                    openData={openModal}
+                                    onClose={() => setOpenModal(false)}
+                                    account={user}
+                                    onUpdate={refreshProfile}
+                                />
+                            </motion.div>
+                        </CardActions>
                     </Card>
                 </Grid>
             </Grid>
-        </Box>
+        </motion.div>
     );
 };
 

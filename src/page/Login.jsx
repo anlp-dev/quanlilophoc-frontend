@@ -15,11 +15,14 @@ import MuiCard from '@mui/material/Card';
 import {keyframes, styled} from '@mui/material/styles';
 import ForgotPassword from '../components/login-signin/ForgotPassword.jsx';
 import {GoogleIcon, FacebookIcon} from '../components/login-signin/CustomIcon.jsx';
-import authService from "../services/authService.jsx";
+import authService from "../services/AuthService.jsx";
 import {useNavigate} from "react-router-dom";
 import Snackbar from '@mui/material/Snackbar';
 import {CircularProgress} from "@mui/material";
 import ReactLoading from 'react-loading';
+import {Message} from '../enums/Message.jsx'
+import Loading from "../components/loading/Loading.jsx";
+import Notification from "../components/notification/Notification.jsx";
 
 const fadeIn = keyframes(`from {
         opacity: 0;
@@ -114,20 +117,22 @@ const Login = () => {
             return;
         }
         const data = new FormData(event.currentTarget);
-        try{
+        try {
             const res_login = await authService.login(data);
-            if(res_login){
+            if (res_login) {
                 localStorage.setItem('token', res_login);
-                setMessLogin('Đăng nhập thành công !');
+                document.title = 'Đợi một chút ...'
+                setMessLogin(Message.LOGIN_SUCCESS);
                 setOpenMess(true);
                 setIsLoading(true);
                 setTimeout(() => {
+                    setIsLoading(false)
                     navigate("/home");
-                }, 3000)
-            }else{
-                throw new Error('Đăng nhập lỗi!')
+                }, 500)
+            } else {
+                throw new Error(Message.LOGIN_ERROR)
             }
-        }catch (e){
+        } catch (e) {
             setMessLogin(e.message)
             setOpenMess(true)
             console.log(e.message)
@@ -151,11 +156,11 @@ const Login = () => {
         //     setEmailErrorMessage('');
         // }
 
-        if(!username.value){
+        if (!username.value) {
             setUserNameError(true);
             setUserNameErrorMess('Tên đăng nhập không được để trống !');
             isValid = false;
-        }else{
+        } else {
             setUserNameError(false);
             setUserNameErrorMess('');
         }
@@ -175,31 +180,14 @@ const Login = () => {
         <>
             <CssBaseline enableColorScheme/>
             <SignInContainer direction="column" justifyContent="space-between">
-                {isLoading && (
-                    <Box
-                        sx={{
-                            position: 'fixed',
-                            top: 0,
-                            left: 0,
-                            width: '100%',
-                            height: '100%',
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            backgroundColor: 'rgba(0, 0, 0, 0.5)', // Nền mờ
-                            zIndex: 1000, // Đảm bảo loading hiển thị trên cùng
-                        }}
-                    >
-                        {/*<CircularProgress size={40}/>*/}
-                        <ReactLoading type="bars" color="#fff" height={100} width={100} />
-                    </Box>
-                )}
-                <Snackbar
-                    anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                {isLoading &&
+                    <>
+                        <Loading/>
+                    </>}
+                <Notification
                     open={openMess}
-                    onClose={handleClose}
                     message={messLogin}
-                    autoHideDuration={3000}
+                    onClose={handleClose}
                 />
                 <Card variant="outlined">
                     <Typography

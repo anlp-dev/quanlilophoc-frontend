@@ -11,16 +11,27 @@
   },
   "proxy": "http://127.0.0.1:9999",
   "dependencies": {
+    "@date-io/date-fns": "^3.0.0",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
+    "@mui/base": "^5.0.0-beta.61",
     "@mui/icons-material": "^6.1.7",
+    "@mui/lab": "^6.0.0-beta.16",
     "@mui/material": "^6.1.7",
+    "@mui/x-date-pickers": "^7.22.3",
+    "axios": "^1.7.9",
+    "chart.js": "^4.4.7",
+    "framer-motion": "^11.11.17",
     "jwt-decode": "^4.0.0",
     "prop-types": "^15.8.1",
     "react": "^18.3.1",
+    "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.3.1",
     "react-loading": "^2.0.3",
-    "react-router-dom": "^6.28.0"
+    "react-router-dom": "^6.28.0",
+    "react-zoom-pan-pinch": "^3.6.1",
+    "recharts": "^2.14.1",
+    "socket.io-client": "^4.8.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",
