@@ -19,19 +19,29 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import {Link, useLocation} from "react-router-dom";
 import RoomIcon from '@mui/icons-material/Room';
-import {PATH} from '../../enums/path.jsx';
+import {Path} from '../../enums/Path.jsx';
+import SettingsSystemDaydreamIcon from '@mui/icons-material/SettingsSystemDaydream';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import AbcIcon from '@mui/icons-material/Abc';
+import AnalyticsIcon from '@mui/icons-material/Analytics';
+import ReportIcon from '@mui/icons-material/Report';
+import SettingsIcon from '@mui/icons-material/Settings';
+import ControlCameraIcon from '@mui/icons-material/ControlCamera';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import SafetyCheckIcon from '@mui/icons-material/SafetyCheck';
 
 const mainListItems = [
     {
         text: 'Trang chủ',
         icon: <HomeRoundedIcon/>,
-        link: PATH.HOME,
+        link: Path.HOME,
         role: ['admin', 'teacher', 'student']
     },
     {
         text: 'Lớp học',
         icon: <ClassIcon/>,
-        link: PATH.CLASS,
+        link: Path.CLASS,
         role: ['admin', 'teacher', 'student'],
         children: [
             {text: 'Lớp 10A1', icon: <RoomIcon/>, link: '/class/10A1'},
@@ -41,7 +51,7 @@ const mainListItems = [
     {
         text: 'Thống kê',
         icon: <DashboardIcon/>,
-        link: PATH.DASHBOARD,
+        link: Path.DASHBOARD,
         role: ['admin']
     },
     {
@@ -54,12 +64,19 @@ const mainListItems = [
         ]
     },
     {
-        text: 'Người dùng',
-        icon: <PeopleRoundedIcon/>,
+        text: 'Quản lý hệ thống',
+        icon: <SettingsSystemDaydreamIcon/>,
         role: ['admin'],
         children: [
-            {text: 'Giáo viên', link: '/users/teacher'},
-            {text: 'Học sinh', link: '/users/student'},
+            {text: 'Người dùng',icon: <AccountCircleIcon/> ,link: '/admin/user'},
+            {text: 'Vai trò',icon: <AbcIcon/> , link: '/admin/roles'},
+            {text: 'Thống kê lượt request',icon: <AnalyticsIcon/> , link: '/admin/request'},
+            {text: 'Thống kê và báo cáo',icon: <ReportIcon/> , link: '/admin/report'},
+            {text: 'Cấu hình hệ thống',icon: <SettingsIcon/> , link: '/admin/config'},
+            {text: 'Kiểm soát hệ thống',icon: <ControlCameraIcon/> , link: '/admin/control'},
+            {text: 'Quản lí quyền truy cập',icon: <ManageAccountsIcon/> , link: '/admin/manage-request'},
+            {text: 'Bảo trì',icon: <SafetyCheckIcon/> , link: '/admin/safe'},
+            {text: 'Bảo mật',icon: <AdminPanelSettingsIcon/> , link: '/admin/security'},
         ]
     },
     {
@@ -67,19 +84,6 @@ const mainListItems = [
         icon: <AssignmentRoundedIcon/>,
         role: ['teacher', 'student']
     },
-];
-
-const secondaryListItems = [
-    {
-        text: 'Settings',
-        icon: <SettingsRoundedIcon/>,
-        children: [
-            {text: 'Tài khoản', link: '/settings/account'},
-            {text: 'Thông báo', link: '/404'},
-        ]
-    },
-    {text: 'About', icon: <InfoRoundedIcon/>},
-    {text: 'Feedback', icon: <HelpRoundedIcon/>},
 ];
 
 export default function MenuContent(role) {
@@ -91,7 +95,7 @@ export default function MenuContent(role) {
     };
 
     return (
-        <Stack sx={{flexGrow: 1, p: 1, justifyContent: 'space-between'}}>
+        <Stack sx={{flexGrow: 1, p: 1, justifyContent: 'space-between', color: 'black'}}>
             <List dense>
                 {mainListItems.map((item, index) => {
                     if (role && item.role && item.role.includes(role.role)) {
@@ -131,37 +135,6 @@ export default function MenuContent(role) {
                         )
                     } else return null;
                 })}
-            </List>
-
-            <List dense>
-                {secondaryListItems.map((item, index) => (
-                    <React.Fragment key={index}>
-                        <ListItem disablePadding sx={{display: 'block'}}>
-                            <ListItemButton onClick={() => handleClick(index + mainListItems.length)}>
-                                <ListItemIcon>{item.icon}</ListItemIcon>
-                                <ListItemText primary={item.text}/>
-                                {item.children && (open[index + mainListItems.length] ? <ExpandLess/> : <ExpandMore/>)}
-                            </ListItemButton>
-                        </ListItem>
-                        {item.children && (
-                            <Collapse in={open[index + mainListItems.length]} timeout="auto" unmountOnExit>
-                                <List component="div" disablePadding>
-                                    {item.children.map((child, childIndex) => (
-                                        <ListItemButton
-                                            key={childIndex}
-                                            sx={{pl: 4}}
-                                            component={Link}
-                                            to={child.link}
-                                            selected={location.pathname === child.link}
-                                        >
-                                            <ListItemText primary={child.text}/>
-                                        </ListItemButton>
-                                    ))}
-                                </List>
-                            </Collapse>
-                        )}
-                    </React.Fragment>
-                ))}
             </List>
         </Stack>
     );

@@ -19,11 +19,11 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import {useEffect, useState} from "react";
-import userService from '../services/userService.jsx'
+import userService from '../services/UserService.jsx'
 import WorkIcon from '@mui/icons-material/Work';
 import TextSnippetIcon from '@mui/icons-material/TextSnippet';
 import ClassIcon from '@mui/icons-material/Class';
-import {ROLE} from "../enums/role.jsx";
+import {Role} from "../enums/Role.jsx";
 
 const theme = createTheme({
     palette: {
@@ -209,7 +209,7 @@ function Home() {
                         </Card>
                     </motion.div>
                 </Grid>
-                <Grid item xs={12} md={6} lg={3} hidden={role.code !== ROLE.ADMIN}>
+                <Grid item xs={12} md={6} lg={3} hidden={role.code !== Role.ADMIN}>
                     <motion.div
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}

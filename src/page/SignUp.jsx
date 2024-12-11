@@ -20,7 +20,7 @@ import ReactLoading from "react-loading";
 import {FormHelperText, Input, InputLabel, MenuItem, Select} from "@mui/material";
 import Grid from '@mui/material/Grid';
 
-import authService from "../services/authService.jsx";
+import authService from "../services/AuthService.jsx";
 import {useNavigate} from "react-router-dom";
 import {useEffect} from "react";
 import Loading from "../components/loading/Loading.jsx";

@@ -15,35 +15,13 @@ import {styled} from '@mui/material/styles';
 import {keyframes} from '@emotion/react';
 import {jwtDecode} from 'jwt-decode';
 import apiConfig from '../configs/apiConfig.jsx';
-import ModalProfile from '../components/modals/modalProfile.jsx';
+import ModalProfile from '../components/modals/ModalProfile.jsx';
 import AccountProfileInfo from '../components/Profile/AccountProfileInfo.jsx';
-import userService from '../services/userService.jsx'
+import userService from '../services/UserService.jsx'
 import Loading from "../components/loading/Loading.jsx";
 import Notification from "../components/notification/Notification.jsx";
-import {MESSAGE_ERROR, MESSAGE} from "../enums/message.jsx";
-
-// Gradient animation for the avatar border
-const gradientAnimation = keyframes`
-    0% {
-        border-color: #ff7eb3;
-    }
-    50% {
-        border-color: #ff758c;
-    }
-    100% {
-        border-color: #ff7eb3;
-    }
-`;
-
-// Styled Avatar
-const StyledAvatar = styled(Avatar)(({theme}) => ({
-    width: 200,
-    height: 200,
-    border: '6px solid',
-    borderColor: '#ff758c',
-    animation: `${gradientAnimation} 3s linear infinite`,
-    boxShadow: '0 4px 15px rgba(255, 117, 140, 0.5)',
-}));
+import {MESSAGE_ERROR, Message} from "../enums/Message.jsx";
+import Account from "../components/Profile/Account.jsx";
 
 // Styled Button
 const StyledButton = styled(Button)(({theme}) => ({
@@ -95,7 +73,7 @@ const Profile = () => {
             const data = await userService.loadDataUser(token);
             setUser(data.data);
             setOpenMess(true)
-            setMessNotification(MESSAGE.UPDATE_PROFILE);
+            setMessNotification(Message.UPDATE_PROFILE);
             setIsLoading(true);
             setTimeout(() => {
                 setOpenMess(false)
@@ -132,7 +110,7 @@ const Profile = () => {
                 padding: '2rem',
                 background: 'linear-gradient(135deg, #fdfcfb, #e2d1c3)',
                 borderRadius: '0px',
-                height: '122%',
+                height: '158%',
                 boxShadow: '0 6px 18px rgba(0, 0, 0, 0.1)',
             }}
         >
@@ -146,8 +124,7 @@ const Profile = () => {
                 onClose={handleClose}
             />
 
-            <Grid container spacing={5} justifyContent="center">
-                {/* Avatar Section */}
+            <Grid container spacing={3} justifyContent="center">
                 <Grid
                     item
                     xs={12}
@@ -159,18 +136,8 @@ const Profile = () => {
                         textAlign: 'center',
                     }}
                 >
-                    <motion.div whileHover={{scale: 1.1}}>
-                        <StyledAvatar alt={user.fullname} src="/avatar.jpg" />
-                    </motion.div>
-                    <Typography
-                        variant="h4"
-                        sx={{color: '#333', fontWeight: 'bold', mt: 2}}
-                    >
-                        {user.fullname}
-                    </Typography>
-                    <Typography variant="subtitle1" sx={{color: '#777', mb: 2}}>
-                        {user.email}
-                    </Typography>
+
+                    <Account user={user}/>
                 </Grid>
 
 
@@ -183,17 +150,9 @@ const Profile = () => {
                             borderRadius: '15px',
                         }}
                     >
-                        <CardContent>
-                            <Typography
-                                variant="h6"
-                                sx={{color: '#555', fontWeight: 'bold', mb: 2}}
-                            >
-                                Thông tin người dùng
-                            </Typography>
-                            <Divider sx={{mb: 2}} />
-                            <AccountProfileInfo account={user} />
-                        </CardContent>
-                        <CardActions sx={{justifyContent: 'center', marginBottom: 1}}>
+
+                        <AccountProfileInfo account={user} />
+                        <CardActions sx={{justifyContent: 'right', marginBottom: 1, marginRight: 4}}>
                             <motion.div whileHover={{scale: 1.05}}>
                                 <StyledButton onClick={() => handleOpenClick()}>
                                     Chỉnh sửa hồ sơ

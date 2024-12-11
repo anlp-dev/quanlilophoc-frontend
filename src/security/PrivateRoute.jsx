@@ -1,6 +1,6 @@
 import React from 'react';
 import {Navigate, Outlet} from 'react-router-dom';
-import authService from '../services/authService';
+import authService from '../services/AuthService.jsx';
 import SideMenu from "../components/layouts/SideMenu.jsx"; // Import service xác thực của bạn
 
 const PrivateRoute = () => {

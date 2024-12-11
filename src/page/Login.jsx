@@ -15,12 +15,12 @@ import MuiCard from '@mui/material/Card';
 import {keyframes, styled} from '@mui/material/styles';
 import ForgotPassword from '../components/login-signin/ForgotPassword.jsx';
 import {GoogleIcon, FacebookIcon} from '../components/login-signin/CustomIcon.jsx';
-import authService from "../services/authService.jsx";
+import authService from "../services/AuthService.jsx";
 import {useNavigate} from "react-router-dom";
 import Snackbar from '@mui/material/Snackbar';
 import {CircularProgress} from "@mui/material";
 import ReactLoading from 'react-loading';
-import {MESSAGE} from '../enums/message.jsx'
+import {Message} from '../enums/Message.jsx'
 import Loading from "../components/loading/Loading.jsx";
 import Notification from "../components/notification/Notification.jsx";
 
@@ -122,7 +122,7 @@ const Login = () => {
             if (res_login) {
                 localStorage.setItem('token', res_login);
                 document.title = 'Đợi một chút ...'
-                setMessLogin(MESSAGE.LOGIN_SUCCESS);
+                setMessLogin(Message.LOGIN_SUCCESS);
                 setOpenMess(true);
                 setIsLoading(true);
                 setTimeout(() => {
@@ -130,7 +130,7 @@ const Login = () => {
                     navigate("/home");
                 }, 500)
             } else {
-                throw new Error(MESSAGE.LOGIN_ERROR)
+                throw new Error(Message.LOGIN_ERROR)
             }
         } catch (e) {
             setMessLogin(e.message)

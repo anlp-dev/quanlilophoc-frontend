@@ -11,6 +11,8 @@ import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 import MenuButton from './MenuButton';
 import {useNavigate} from "react-router-dom";
+import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
+import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
 
 const MenuItem = styled(MuiMenuItem)({
     margin: '2px 0',
@@ -52,33 +54,42 @@ export default function OptionsMenu() {
                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                 sx={{
-                    [`& .${listClasses.root}`]: {
-                        padding: '4px',
-                    },
                     [`& .${paperClasses.root}`]: {
+                        border: '1px solid #ccc', // Màu viền
+                        borderRadius: '8px', // Bo góc
+                        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
                         padding: 0,
                     },
                     [`& .${dividerClasses.root}`]: {
-                        margin: '4px -4px',
+                        margin: '4px 0',
                     },
                 }}
             >
-                <MenuItem onClick={handleClickProfile}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>Settings</MenuItem>
+                {/* Profile Menu Item */}
+                <MenuItem onClick={handleClickProfile}>
+                    <ListItemIcon>
+                        <PersonRoundedIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText>Profile</ListItemText>
+                </MenuItem>
+
+                {/* Settings Menu Item */}
+                <MenuItem onClick={handleClose}>
+                    <ListItemIcon>
+                        <SettingsRoundedIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText>Settings</ListItemText>
+                </MenuItem>
+
+                {/* Divider */}
                 <Divider />
-                <MenuItem
-                    onClick={handleClose}
-                    sx={{
-                        [`& .${listItemIconClasses.root}`]: {
-                            ml: 'auto',
-                            minWidth: 0,
-                        },
-                    }}
-                >
-                    <ListItemText onClick={handleLogout}>Logout</ListItemText>
+
+                {/* Logout Menu Item */}
+                <MenuItem onClick={handleLogout}>
                     <ListItemIcon>
                         <LogoutRoundedIcon fontSize="small" />
                     </ListItemIcon>
+                    <ListItemText>Logout</ListItemText>
                 </MenuItem>
             </Menu>
         </React.Fragment>

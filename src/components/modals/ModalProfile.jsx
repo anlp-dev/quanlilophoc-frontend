@@ -15,8 +15,8 @@ import {
 } from '@mui/material';
 import {Person as PersonIcon} from '@mui/icons-material';
 import {validateFormModal} from '../../utils/validate.jsx';
-import userService from '../../services/userService.jsx'
-import {MESSAGE_ERROR, MESSAGE} from "../../enums/message.jsx";
+import userService from '../../services/UserService.jsx'
+import {MESSAGE_ERROR, Message} from "../../enums/Message.jsx";
 
 const style = {
     position: 'absolute',
@@ -33,7 +33,6 @@ const style = {
 
 const ModalProfile = ({openData, onClose, account, onUpdate}) => {
     const [fullname, setFullname] = useState(account?.fullname || '');
-    const [email, setEmail] = useState(account?.email || '');
     const [phone, setPhone] = useState(account?.teacherId?.phoneNumber || account?.studentId?.phoneNumber || '');
     const [address, setAddress] = useState(account?.teacherId?.address || account?.studentId?.address || '');
     const [gender, setGender] = useState(account?.teacherId?.gender || account?.studentId?.gender || ''); // 'male', 'female', 'other'
@@ -43,7 +42,6 @@ const ModalProfile = ({openData, onClose, account, onUpdate}) => {
 
     useEffect(() => {
         setFullname(account?.fullname || '');
-        setEmail(account?.email || '');
         setPhone(account?.teacherId?.phoneNumber || account?.studentId?.phoneNumber || '');
         setAddress(account?.teacherId?.address || account?.studentId?.address || '');
         setGender(account?.teacherId?.gender || account?.studentId?.gender || '');
@@ -57,7 +55,6 @@ const ModalProfile = ({openData, onClose, account, onUpdate}) => {
         try {
             const updatedData = {
                 fullname,
-                email,
                 phone,
                 address,
                 gender,
@@ -71,16 +68,15 @@ const ModalProfile = ({openData, onClose, account, onUpdate}) => {
             const response = await userService.updateUser(updatedData, account?._id);
             if(response.status === 200){
                 onUpdate();
-                    onClose();
+                onClose();
             }else{
-
             }
         } catch (e) {
             throw new Error(e);
         }
     };
 
-    const isFormIncomplete = !fullname || !email || !phone || !address || !gender || !dateOfBirth;
+    const isFormIncomplete = !fullname || !phone || !address || !gender || !dateOfBirth;
 
     return (
         <Modal
@@ -110,18 +106,6 @@ const ModalProfile = ({openData, onClose, account, onUpdate}) => {
                                 variant="outlined"
                                 value={fullname}
                                 onChange={(e) => setFullname(e.target.value)}
-                            />
-                        </FormControl>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <FormControl fullWidth>
-                            <TextField
-                                error={!!formError.email}
-                                helperText={formError.email}
-                                label="Email"
-                                variant="outlined"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
                             />
                         </FormControl>
                     </Grid>
@@ -162,7 +146,7 @@ const ModalProfile = ({openData, onClose, account, onUpdate}) => {
                                 <MenuItem value="Nữ">Nữ</MenuItem>
                                 <MenuItem value="Khác">Khác</MenuItem>
                             </Select>
-                            <FormHelperText>{!!formError.gender_error ? formError.gender_error : 'Chọn giới tính'}</FormHelperText>
+                            <FormHelperText>{!!formError.gender_error ? formError.gender_error : ''}</FormHelperText>
                         </FormControl>
                     </Grid>
                     <Grid item xs={12}>
