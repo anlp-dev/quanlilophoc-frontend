@@ -15,12 +15,12 @@ const Loading = () => {
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                    backgroundColor: 'rgba(210,198,198,0.5)',
                     zIndex: 1000,
                 }}
             >
                 {/*<CircularProgress size={40}/>*/}
-                <ReactLoading type="bars" color="#fff" height={100} width={100}/>
+                <ReactLoading type="cylon" color="white" height={100} width={100}/>
             </Box>
         </>
     )

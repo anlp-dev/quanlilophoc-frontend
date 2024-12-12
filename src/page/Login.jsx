@@ -100,6 +100,7 @@ const Login = () => {
     const [messLogin, setMessLogin] = React.useState(false);
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = React.useState(false);
+    const [isError, setIsError] = React.useState(false);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -125,6 +126,7 @@ const Login = () => {
                 setMessLogin(Message.LOGIN_SUCCESS);
                 setOpenMess(true);
                 setIsLoading(true);
+                setIsError(true)
                 setTimeout(() => {
                     setIsLoading(false)
                     navigate("/home");
@@ -135,6 +137,7 @@ const Login = () => {
         } catch (e) {
             setMessLogin(e.message)
             setOpenMess(true)
+            setIsError(false);
             console.log(e.message)
         }
 
@@ -188,6 +191,7 @@ const Login = () => {
                     open={openMess}
                     message={messLogin}
                     onClose={handleClose}
+                    error={isError}
                 />
                 <Card variant="outlined">
                     <Typography
