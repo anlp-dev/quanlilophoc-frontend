@@ -1,6 +1,7 @@
 import React from 'react';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
+import {AlertTitle} from "@mui/material";
 
 const Notification = ({
                           open,
@@ -17,9 +18,11 @@ const Notification = ({
             onClose={onClose}
             autoHideDuration={autoHideDuration}
         >
-            {error ? (<Alert severity="success" onClose={onClose}>
+            {error ? (<Alert variant="filled" severity="success" onClose={onClose}>
+                <AlertTitle>Thành công!!!</AlertTitle>
                 {message}
-            </Alert>) : (<Alert severity="error" onClose={onClose}>
+            </Alert>) : (<Alert variant="filled" severity="error" onClose={onClose}>
+                <AlertTitle>Lỗi!!!</AlertTitle>
                 {message}
             </Alert>)}
         </Snackbar>
