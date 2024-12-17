@@ -8,7 +8,7 @@ import {
     Card,
     CardContent,
     CardActions,
-    Box,
+    Box, Slide, Paper, Fade, useTheme,
 } from '@mui/material';
 import {motion} from 'framer-motion';
 import {styled} from '@mui/material/styles';
@@ -49,6 +49,7 @@ const Profile = () => {
     const [openMess, setOpenMess] = useState(false);
     const [messNotification, setMessNotification] = useState('');
     const [isLoading, setIsLoading] = React.useState(false);
+    const theme = useTheme();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -69,7 +70,7 @@ const Profile = () => {
 
     const refreshProfile = async () => {
         const token = localStorage.getItem('token');
-        try{
+        try {
             const data = await userService.loadDataUser(token);
             setUser(data.data);
             setOpenMess(true)
@@ -80,7 +81,7 @@ const Profile = () => {
                 setMessNotification('');
                 setIsLoading(false);
             }, 500);
-        }catch (e) {
+        } catch (e) {
             setOpenMess(true)
             setMessNotification(MESSAGE_ERROR.UPDATE_PROFILE);
             setIsLoading(true);
@@ -102,73 +103,78 @@ const Profile = () => {
     };
 
     return (
-        <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={variants}
-            style={{
-                padding: '2rem',
-                background: 'linear-gradient(135deg, #fdfcfb, #e2d1c3)',
-                borderRadius: '0px',
-                height: '158%',
-                boxShadow: '0 6px 18px rgba(0, 0, 0, 0.1)',
-            }}
-        >
-            {isLoading &&
-                <>
-                    <Loading/>
-                </>}
-            <Notification
-                open={openMess}
-                message={messNotification}
-                onClose={handleClose}
-            />
+        <Slide direction="up" in>
+            <Paper
+                elevation={4}
+                sx={{
+                    p: 3,
+                    m: 'auto',
+                    marginTop: 3,
+                    width: '100%',
+                    maxWidth: 1550,
+                    borderRadius: 3,
+                    boxShadow: theme.shadows[5],
+                }}
+            >
+                <Typography variant="h4" fontWeight="bold" color="#DB7093" gutterBottom>
+                    Thông tin cá nhân
+                </Typography>
+                    {isLoading &&
+                        <>
+                            <Loading/>
+                        </>}
+                    <Notification
+                        open={openMess}
+                        message={messNotification}
+                        onClose={handleClose}
+                    />
 
-            <Grid container spacing={3} justifyContent="center">
-                <Grid
-                    item
-                    xs={12}
-                    md={4}
-                    sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        textAlign: 'center',
-                    }}
-                >
+                    <Grid container spacing={3} justifyContent="center">
+                        <Grid
+                            item
+                            xs={12}
+                            md={4}
+                            sx={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                textAlign: 'center',
+                            }}
+                        >
 
-                    <Account user={user}/>
-                </Grid>
+                            <Account user={user}/>
+                        </Grid>
 
 
-                {/* User Information Section */}
-                <Grid item xs={12} md={8}>
-                    <Card
-                        sx={{
-                            background: 'linear-gradient(145deg, #ffffff, #f0f0f0)',
-                            boxShadow: '0 8px 16px rgba(0, 0, 0, 0.1)',
-                            borderRadius: '15px',
-                        }}
-                    >
+                        {/* User Information Section */}
+                        <Grid item xs={12} md={8}>
+                            <Card
+                                sx={{
+                                    background: 'linear-gradient(145deg, #ffffff, #f0f0f0)',
+                                    boxShadow: '0 8px 16px rgba(0, 0, 0, 0.1)',
+                                    borderRadius: '15px',
+                                }}
+                            >
 
-                        <AccountProfileInfo account={user} />
-                        <CardActions sx={{justifyContent: 'right', marginBottom: 1, marginRight: 4}}>
-                            <motion.div whileHover={{scale: 1.05}}>
-                                <StyledButton onClick={() => handleOpenClick()}>
-                                    Chỉnh sửa hồ sơ
-                                </StyledButton>
-                                <ModalProfile
-                                    openData={openModal}
-                                    onClose={() => setOpenModal(false)}
-                                    account={user}
-                                    onUpdate={refreshProfile}
-                                />
-                            </motion.div>
-                        </CardActions>
-                    </Card>
-                </Grid>
-            </Grid>
-        </motion.div>
+                                <AccountProfileInfo account={user}/>
+                                <CardActions sx={{justifyContent: 'right', marginBottom: 1, marginRight: 4}}>
+                                    <motion.div whileHover={{scale: 1.05}}>
+                                        <StyledButton onClick={() => handleOpenClick()}>
+                                            Chỉnh sửa hồ sơ
+                                        </StyledButton>
+                                        <ModalProfile
+                                            openData={openModal}
+                                            onClose={() => setOpenModal(false)}
+                                            account={user}
+                                            onUpdate={refreshProfile}
+                                        />
+                                    </motion.div>
+                                </CardActions>
+                            </Card>
+                        </Grid>
+                    </Grid>
+            </Paper>
+        </Slide>
     );
 };
 

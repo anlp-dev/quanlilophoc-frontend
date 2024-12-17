@@ -1,11 +1,24 @@
-import { Card, CardContent, Typography, Button, Grid, Box, Divider } from '@mui/material';
+import {Card, CardContent, Typography, Button, Grid, Box, Divider, Slide, Paper, useTheme} from '@mui/material';
 import { AddCircle, Edit } from '@mui/icons-material';
+import React from "react";
 
 const RoleManagement = () => {
+    const theme = useTheme();
     return (
-        <Card sx={{ minWidth: 275, boxShadow: 3, borderRadius: 2 }}>
-            <CardContent>
-                <Typography variant="h5" component="div" gutterBottom sx={{ fontWeight: 'bold', color: '#3f51b5' }}>
+        <Slide direction="up" in>
+            <Paper
+                elevation={4}
+                sx={{
+                    p: 3,
+                    m: 'auto',
+                    marginTop: 3,
+                    width: '100%',
+                    maxWidth: 1550,
+                    borderRadius: 3,
+                    boxShadow: theme.shadows[5],
+                }}
+            >
+                <Typography variant="h4" fontWeight="bold" color="#3f51b5" gutterBottom>
                     Quản trị Vai Trò
                 </Typography>
 
@@ -52,8 +65,8 @@ const RoleManagement = () => {
                         </Button>
                     </Grid>
                 </Grid>
-            </CardContent>
-        </Card>
+            </Paper>
+        </Slide>
     );
 };
 

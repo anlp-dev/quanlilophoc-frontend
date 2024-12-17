@@ -209,20 +209,19 @@ const SignUp = () => {
         }
         const data = new FormData(event.currentTarget);
         try {
+            setIsLoading(true);
             if (!validateInputs()) {
                 return;
             }
-
-
             const res_signin = await authService.signup(data);
             if (res_signin) {
                 setOpenNotification(true)
                 setMessNotification('Đăng ký thành công!');
-                setIsLoading(true);
                 setTimeout(() => {
                     navigate("/");
                 }, 500);
             }
+            setIsLoading(false);
         } catch (e) {
             setOpenNotification(true)
             setMessNotification(e.message)

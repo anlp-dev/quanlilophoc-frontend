@@ -63,8 +63,9 @@ export const getUserTableColumns = ({
                                         handleEditClick,
                                         handleDeleteClick,
                                     }) => [
+    {field: 'serial', headerName: "STT", width: 80},
     {field: 'username', headerName: 'Tên đăng nhập', width: 150, editable: true},
-    {field: 'fullname', headerName: 'Họ tên đầy đủ', width: 200, editable: true},
+    {field: 'fullname', headerName: 'Họ và tên', width: 200, editable: true},
     {field: 'email', headerName: 'Email', width: 200, editable: true},
     {
         field: 'role', headerName: 'Role', width: 150,
