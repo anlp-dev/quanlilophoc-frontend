@@ -1,10 +1,23 @@
-import { Card, CardContent, Typography, Grid, Button } from '@mui/material';
+import {Card, CardContent, Typography, Grid, Button, Slide, Paper, useTheme} from '@mui/material';
+import React from "react";
 
 const AccessControl = () => {
+    const theme = useTheme();
     return (
-        <Card sx={{ minWidth: 275 }}>
-            <CardContent>
-                <Typography variant="h5" component="div" gutterBottom>
+        <Slide direction="up" in>
+            <Paper
+                elevation={4}
+                sx={{
+                    p: 3,
+                    m: 'auto',
+                    marginTop: 3,
+                    width: '100%',
+                    maxWidth: 1550,
+                    borderRadius: 3,
+                    boxShadow: theme.shadows[5],
+                }}
+            >
+                <Typography variant="h4" fontWeight="bold" color="black" gutterBottom>
                     Quản Lí Quyền Truy Cập
                 </Typography>
                 <Grid container spacing={2}>
@@ -15,8 +28,8 @@ const AccessControl = () => {
                         <Button variant="contained" color="error" fullWidth>Gỡ Quyền</Button>
                     </Grid>
                 </Grid>
-            </CardContent>
-        </Card>
+            </Paper>
+        </Slide>
     );
 };
 

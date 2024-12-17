@@ -22,6 +22,7 @@ import KiemSoatHeThong from "./components/admin/KiemSoatHeThong.jsx";
 import QuanLyQuyenTruyCap from "./components/admin/QuanLyQuyenTruyCap.jsx";
 import BaoTri from "./components/admin/BaoTri.jsx";
 import BaoMat from "./components/admin/BaoMat.jsx";
+import VerifyEmailPage from "./page/VerifyEmail.jsx";
 
 function App() {
 
@@ -30,6 +31,7 @@ function App() {
         <>
             <BrowserRouter>
                 <Routes>
+                    <Route path="/verifyEmail" element={<VerifyEmailPage/>}/>
                     <Route path="/signup" element={<SignUp />} />
                     <Route path="/" element={<Login />} />
 

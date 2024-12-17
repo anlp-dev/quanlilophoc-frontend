@@ -152,7 +152,7 @@ export default function QuanTriNguoiDung() {
                 <Fade in>
                     <Box sx={{ height: 850 }}>
                         <DataGrid
-                            rows={rows}
+                            rows={rows.map((item, index) => ({ ...item, serial: index + 1 }))}
                             columns={columns}
                             editMode="row"
                             rowModesModel={rowModesModel}
