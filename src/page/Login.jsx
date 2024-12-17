@@ -120,8 +120,12 @@ const Login = () => {
         const data = new FormData(event.currentTarget);
         try {
             const res_login = await authService.login(data);
-            if (res_login) {
-                localStorage.setItem('token', res_login);
+            console.log(res_login)
+            if (res_login.status === 400) {
+                throw new Error(res_login.message);
+            }
+            if(res_login.status === 200) {
+                localStorage.setItem('token', res_login?.token);
                 document.title = 'Đợi một chút ...'
                 setMessLogin(Message.LOGIN_SUCCESS);
                 setOpenMess(true);
@@ -131,8 +135,6 @@ const Login = () => {
                     setIsLoading(false)
                     navigate("/home");
                 }, 500)
-            } else {
-                throw new Error(Message.LOGIN_ERROR)
             }
         } catch (e) {
             setMessLogin(e.message)

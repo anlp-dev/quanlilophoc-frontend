@@ -17,7 +17,7 @@ const authService = {
                     throw new Error('Sai tên đăng nhập hoặc mật khẩu');
                 } else if (res.status === 404) {
                     throw new Error('Tài khoản không tồn tại');
-                } else {
+                }else {
                     const errorData = await res.json(); // Lấy thông tin lỗi chi tiết từ response
                     throw new Error(errorData.message || 'Lỗi server');
                 }
@@ -25,7 +25,7 @@ const authService = {
         }
 
         const data = await res.json();
-        return data.token;
+        return data;
     },
 
     async signup(data_req) {
