@@ -6,7 +6,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import SaveIcon from '@mui/icons-material/Save';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import CancelIcon from '@mui/icons-material/Cancel';
-import {STATUS, STATUS_OPTIONS, ROLE_OPTIONS} from "../../enums/Status.jsx";
+import {STATUS, STATUS_OPTIONS, ROLE_OPTIONS} from "../../../enums/Status.jsx";
 
 const CustomSelectCell = ({value, onValueChange, options}) => (
     <Select
@@ -55,6 +55,25 @@ const StatusCell = ({statusCode}) => {
     );
 };
 
+const StatusCellRole = ({role}) => {
+    const roleName =
+        Object.values(ROLE_OPTIONS).find((s) => s.value === role?.code) || STATUS.UNKNOWN;
+
+    return (
+        <Box sx={{display: 'flex', alignItems: 'center'}}>
+            <Box
+                sx={{
+                    width: 10,
+                    height: 10,
+                    borderRadius: '50%',
+                    marginRight: 1,
+                }}
+            />
+            <span>{roleName.label}</span>
+        </Box>
+    );
+};
+
 // Hàm tạo columns
 export const getUserTableColumns = ({
                                         rowModesModel,
@@ -69,9 +88,12 @@ export const getUserTableColumns = ({
     {field: 'email', headerName: 'Email', width: 200, editable: true},
     {
         field: 'role', headerName: 'Role', width: 150,
+        renderCell: (params) => (
+            <StatusCellRole role={params.row.role}/>
+        ),
         renderEditCell: (params) => (
             <CustomSelectCell
-                value={params.value}
+                value={params.value?.code}
                 onValueChange={params.api.setEditCellValue}
                 options={ROLE_OPTIONS}
             />
