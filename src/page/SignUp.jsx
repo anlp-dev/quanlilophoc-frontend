@@ -25,6 +25,7 @@ import {useNavigate} from "react-router-dom";
 import {useEffect} from "react";
 import Loading from "../components/loading/Loading.jsx";
 import Notification from "../components/notification/Notification.jsx";
+import apiConfig from "../configs/apiConfig.jsx";
 
 const fadeIn = keyframes(`from {
         opacity: 0;
@@ -130,7 +131,7 @@ const SignUp = () => {
     useEffect(() => {
         async function fetchData() {
             try {
-                const res_data = await fetch('http://127.0.0.1:9999/role/');
+                const res_data = await fetch(`${apiConfig.baseUrl}/role/`);
                 const data = await res_data.json();
                 setRole(data.data);
             } catch (e) {
