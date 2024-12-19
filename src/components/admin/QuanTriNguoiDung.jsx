@@ -22,7 +22,7 @@ import {
     GridRowEditStopReasons,
 } from '@mui/x-data-grid';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import {getUserTableColumns} from "../tables/collumnsTableAdmin.jsx";
+import {getUserTableColumns} from "./table/collumnsTableAdmin.jsx";
 import { useEffect } from 'react';
 import userByAdminService from '../../services/admin/UserByAdminService.jsx';
 
@@ -65,24 +65,27 @@ export default function QuanTriNguoiDung() {
     const [rowModesModel, setRowModesModel] = React.useState({});
     const theme = useTheme();
 
+
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const resData = await userByAdminService.getAllUsers();
-                const flatData = resData.data.map((user) => ({
-                    id: user._id,
-                    username: user.username,
-                    fullname: user.fullname,
-                    email: user.email,
-                    role: user.roleId?.name || 'Unknown',
-                    createdAt: new Date(user.createdAt).toLocaleDateString() || 'N/A',
-                    updatedAt: new Date(user.updatedAt).toLocaleDateString() || 'N/A',
-                    deletedAt: new Date(user.deletedAt).toLocaleDateString() || 'N/A',
-                    phoneNumber: user.teacherId?.phoneNumber || user.studentId?.phoneNumber || 'N/A',
-                    address: user.teacherId?.address || user.studentId?.address || 'N/A',
-                    status: user.status
-                }));
-                setRows(flatData);
+                if(resData.status === 200) {
+                    const flatData = resData.data.map((user) => ({
+                        id: user._id,
+                        username: user.username,
+                        fullname: user.fullname,
+                        email: user.email,
+                        role: user?.roleId || 'Unknown',
+                        createdAt: new Date(user.createdAt).toLocaleDateString() || 'N/A',
+                        updatedAt: new Date(user.updatedAt).toLocaleDateString() || 'N/A',
+                        deletedAt: new Date(user.deletedAt).toLocaleDateString() || 'N/A',
+                        phoneNumber: user.teacherId?.phoneNumber || user.studentId?.phoneNumber || 'N/A',
+                        address: user.teacherId?.address || user.studentId?.address || 'N/A',
+                        status: user.status
+                    }));
+                    setRows(flatData);
+                }
             } catch (e) {
                 console.log(e);
             }

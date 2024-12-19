@@ -19,8 +19,10 @@ const RequestStatistics = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
+                const token = localStorage.getItem("token");
                 const res = await fetch(`${apiConfig.baseUrl}/system/statistics/requests`, {
                     method: "GET",
+                    headers: apiConfig.getAuthHeaders(token)
                 });
 
                 if (!res.ok) {
@@ -50,7 +52,7 @@ const RequestStatistics = () => {
     // Tìm ngày có nhiều request nhất
     const maxRequest = Math.max(...dataChart.map((entry) => entry.count), 0); // Tránh lỗi khi dataChart rỗng
     const maxRequestDay = dataChart.find((entry) => entry.count === maxRequest)?.time;
-
+    const totalRequests = dataChart.reduce((total, entry) => total + (entry.count || 0), 0);
     return (
         <Slide direction="up" in>
             <Paper
@@ -100,6 +102,21 @@ const RequestStatistics = () => {
                             variant="body1"
                             sx={{
                                 mb: 3,
+                                color: "#3df60a",
+                                fontWeight: "bold",
+                                background: "#ebffe0",
+                                padding: "10px",
+                                borderRadius: 2,
+                                boxShadow: "0px 6px 10px rgba(0, 0, 0, 0.1)",
+                            }}
+                        >
+                            Tổng số request: ({totalRequests} requests)
+                        </Typography>
+
+                        <Typography
+                            variant="body1"
+                            sx={{
+                                mb: 3,
                                 color: "#d32f2f",
                                 fontWeight: "bold",
                                 background: "#ffe0e0",
@@ -113,7 +130,7 @@ const RequestStatistics = () => {
 
 
                         {/* Biểu đồ */}
-                        <ResponsiveContainer width="100%" height={650}>
+                        <ResponsiveContainer width="100%" height={600}>
                             {chartData.length > 0 ? (
                                 <LineChart data={chartData}>
                                     <CartesianGrid strokeDasharray="3 3" stroke="#ccc"/>
