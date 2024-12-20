@@ -60,9 +60,11 @@ const RequestStatistics = () => {
                 sx={{
                     p: 3,
                     m: 'auto',
-                    marginTop: 3,
+                    marginTop: 1,
                     width: '100%',
+                    height: '100%',
                     maxWidth: 1550,
+                    maxHeight: 2000,
                     borderRadius: 3,
                     boxShadow: 5,
                 }}
@@ -130,7 +132,7 @@ const RequestStatistics = () => {
 
 
                         {/* Biểu đồ */}
-                        <ResponsiveContainer width="100%" height={600}>
+                        <ResponsiveContainer width="100%" height={620}>
                             {chartData.length > 0 ? (
                                 <LineChart data={chartData}>
                                     <CartesianGrid strokeDasharray="3 3" stroke="#ccc"/>

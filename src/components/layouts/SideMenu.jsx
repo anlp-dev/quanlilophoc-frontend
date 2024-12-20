@@ -74,7 +74,8 @@ export default function SideMenu() {
             sx={{
                 display: {xs: 'none', md: 'block'},
                 [`& .${drawerClasses.paper}`]: {
-                    backgroundColor: '#E6E6FA',
+                    backgroundColor: '#FFFFFF',
+                    borderRadius: '20px',
                 },
             }}
         >
@@ -91,7 +92,7 @@ export default function SideMenu() {
                         borderRadius: '4px',
                     },
                     '&::-webkit-scrollbar-thumb:hover': {
-                        backgroundColor: '#a1a1a1',
+                        backgroundColor: '#000000',
                     },
                     '&::-webkit-scrollbar-track': {
                         backgroundColor: '#f1f1f1',
@@ -109,7 +110,7 @@ export default function SideMenu() {
                     alignItems: 'center',
                     borderTop: '1px solid',
                     borderColor: 'divider',
-                    backgroundColor: '#FFE4E1',
+                    backgroundColor: '#eee2e0',
                     color: 'black',
                 }}
             >
