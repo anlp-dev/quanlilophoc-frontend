@@ -156,7 +156,7 @@ const RoleManagement = () => {
                     error={isError}
                 />
                 <Paper elevation={4}
-                       sx={{p: 4, m: "auto", marginTop: 3, width: "100%", maxWidth: 1550, borderRadius: 3}}>
+                       sx={{p: 4, m: "auto", marginTop: 1, width: "100%", maxWidth: 1550, borderRadius: 3}}>
                     {loading ? <Loading/> : ''}
                     <Typography variant="h4" fontWeight="bold" color="primary" gutterBottom>
                         Quản lý Vai trò và Quyền hạn

@@ -10,7 +10,7 @@ const SystemControl = () => {
                 sx={{
                     p: 3,
                     m: 'auto',
-                    marginTop: 3,
+                    marginTop: 1,
                     width: '100%',
                     maxWidth: 1550,
                     borderRadius: 3,

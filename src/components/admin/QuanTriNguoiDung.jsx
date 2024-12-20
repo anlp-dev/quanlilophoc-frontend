@@ -7,7 +7,7 @@ import {
     Slide,
     Fade,
     Grid,
-    useTheme,
+    useTheme, Select, InputAdornment, MenuItem,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
@@ -19,50 +19,18 @@ import {
     DataGrid,
     GridToolbarContainer,
     GridActionsCellItem,
-    GridRowEditStopReasons,
+    GridRowEditStopReasons, GridSearchIcon,
 } from '@mui/x-data-grid';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import {getUserTableColumns} from "./table/collumnsTableAdmin.jsx";
-import { useEffect } from 'react';
+import {useEffect} from 'react';
 import userByAdminService from '../../services/admin/UserByAdminService.jsx';
-
-function EditToolbar(props) {
-    const { setRows, setRowModesModel } = props;
-
-    const handleClick = () => {
-        const id = Math.random().toString(36).substr(2, 9); // Random ID
-        setRows((oldRows) => [
-            ...oldRows,
-            { id, username: '', fullname: '', email: '', role: '', isNew: true },
-        ]);
-        setRowModesModel((oldModel) => ({
-            ...oldModel,
-            [id]: { mode: GridRowModes.Edit, fieldToFocus: 'username' },
-        }));
-    };
-
-    return (
-        <GridToolbarContainer>
-            <Button
-                color="primary"
-                variant="contained"
-                startIcon={<AddIcon />}
-                onClick={handleClick}
-                sx={{
-                    fontWeight: 'bold',
-                    backgroundColor: 'secondary.main',
-                    '&:hover': { backgroundColor: 'secondary.dark' },
-                }}
-            >
-                Thêm người dùng
-            </Button>
-        </GridToolbarContainer>
-    );
-}
+import {EditToolbar} from '../admin/table/toolbars/editToolBars.jsx'
 
 export default function QuanTriNguoiDung() {
     const [rows, setRows] = React.useState([]);
     const [rowModesModel, setRowModesModel] = React.useState({});
+    const [searchFilters, setSearchFilters] = React.useState({});
     const theme = useTheme();
 
 
@@ -70,7 +38,7 @@ export default function QuanTriNguoiDung() {
         const fetchData = async () => {
             try {
                 const resData = await userByAdminService.getAllUsers();
-                if(resData.status === 200) {
+                if (resData.status === 200) {
                     const flatData = resData.data.map((user) => ({
                         id: user._id,
                         username: user.username,
@@ -100,11 +68,11 @@ export default function QuanTriNguoiDung() {
     };
 
     const handleEditClick = (id) => () => {
-        setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+        setRowModesModel({...rowModesModel, [id]: {mode: GridRowModes.Edit}});
     };
 
     const handleSaveClick = (id) => () => {
-        setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+        setRowModesModel({...rowModesModel, [id]: {mode: GridRowModes.View}});
     };
 
     const handleDeleteClick = (id) => () => {
@@ -114,7 +82,7 @@ export default function QuanTriNguoiDung() {
     const handleCancelClick = (id) => () => {
         setRowModesModel({
             ...rowModesModel,
-            [id]: { mode: GridRowModes.View, ignoreModifications: true },
+            [id]: {mode: GridRowModes.View, ignoreModifications: true},
         });
 
         const editedRow = rows.find((row) => row.id === id);
@@ -124,7 +92,7 @@ export default function QuanTriNguoiDung() {
     };
 
     const processRowUpdate = (newRow) => {
-        const updatedRow = { ...newRow, isNew: false };
+        const updatedRow = {...newRow, isNew: false};
         setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
         return updatedRow;
     };
@@ -133,7 +101,30 @@ export default function QuanTriNguoiDung() {
         setRowModesModel(newRowModesModel);
     };
 
-    const columns = getUserTableColumns({rowModesModel, handleSaveClick, handleCancelClick, handleEditClick, handleDeleteClick})
+    const onSearchChange = (field, value) => {
+        setSearchFilters((prevFilters) => ({
+            ...prevFilters,
+            [field]: value.toLowerCase(), // Chuyển từ khóa thành chữ thường để tìm kiếm không phân biệt chữ hoa/chữ thường
+        }));
+    };
+
+// Hàm lọc dữ liệu
+    const filteredData = rows.filter((row) => {
+        return Object.keys(searchFilters).every((key) => {
+            const filterValue = searchFilters[key];
+            if (!filterValue) return true; // Nếu không có bộ lọc cho trường này, không cần kiểm tra
+            return row[key]?.toString().toLowerCase().includes(filterValue);
+        });
+    });
+
+
+    const columns = getUserTableColumns({
+        rowModesModel,
+        handleSaveClick,
+        handleCancelClick,
+        handleEditClick,
+        handleDeleteClick
+    })
 
     return (
         <Slide direction="up" in>
@@ -142,9 +133,11 @@ export default function QuanTriNguoiDung() {
                 sx={{
                     p: 3,
                     m: 'auto',
-                    marginTop: 3,
+                    marginTop: 1,
                     width: '100%',
+                    height: '100%',
                     maxWidth: 1550,
+                    maxHeight: 2000,
                     borderRadius: 3,
                     boxShadow: theme.shadows[5],
                 }}
@@ -153,29 +146,29 @@ export default function QuanTriNguoiDung() {
                     Quản lý người dùng
                 </Typography>
                 <Fade in>
-                    <Box sx={{ height: 850 }}>
+                    <Box sx={{height: 860}}>
                         <DataGrid
-                            rows={rows.map((item, index) => ({ ...item, serial: index + 1 }))}
+                            rows={filteredData.map((item, index) => ({...item, serial: index + 1}))}
                             columns={columns}
                             editMode="row"
                             rowModesModel={rowModesModel}
                             onRowModesModelChange={handleRowModesModelChange}
                             onRowEditStop={handleRowEditStop}
                             processRowUpdate={processRowUpdate}
-                            slots={{ toolbar: EditToolbar }}
+                            slots={{toolbar: EditToolbar}}
                             slotProps={{
-                                toolbar: { setRows, setRowModesModel },
+                                toolbar: {setRows, setRowModesModel, onSearchChange},
                             }}
                             sx={{
                                 '& .MuiDataGrid-cell:hover': {
                                     color: 'primary.main',
                                 },
                                 '& .MuiDataGrid-columnHeaders': {
-                                    backgroundColor: 'secondary.light',
                                     color: 'black',
                                     fontSize: 16,
                                     fontWeight: 'bold',
                                     height: 60,
+                                    textAlign: 'center'
                                 },
                                 '& .MuiDataGrid-row': {
                                     transition: 'all 0.3s ease-in-out',
