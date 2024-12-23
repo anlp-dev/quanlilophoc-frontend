@@ -52,6 +52,7 @@ const Dashboard = () => {
                     width: '100%',
                     maxWidth: 1550,
                     borderRadius: 3,
+                    height: "98vh",
                     boxShadow: theme.shadows[5],
                 }}
             >

@@ -65,6 +65,7 @@ function Home() {
                     p: 3,
                     m: 'auto',
                     marginTop: 1,
+                    height: "98vh",
                     width: '100%',
                     maxWidth: 1550,
                     borderRadius: 3,
