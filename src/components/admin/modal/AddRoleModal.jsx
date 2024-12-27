@@ -8,6 +8,7 @@ import {
     Backdrop,
     Fade,
 } from "@mui/material";
+import {notifySuccess, notifyError, notifyInfo} from "../../notification/ToastNotification.jsx";
 
 const AddRoleModal = ({ open, handleClose, onSave }) => {
     const [formData, setFormData] = useState({
@@ -24,9 +25,10 @@ const AddRoleModal = ({ open, handleClose, onSave }) => {
         if (formData.name && formData.code) {
             onSave(formData); // Gửi dữ liệu ngược lại qua prop onSave
             setFormData({ name: "", code: "" }); // Reset form
+            notifySuccess("Lưu thành công !!!")
             handleClose(); // Đóng Modal
         } else {
-            alert("Please fill out all fields.");
+            notifyInfo("Vui lòng nhập đầy đủ !!!")
         }
     };
 

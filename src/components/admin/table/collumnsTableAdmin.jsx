@@ -84,17 +84,16 @@ export const getUserTableColumns = ({
     {field: 'fullname', headerName: 'Họ và tên', width: 200, editable: true},
     {field: 'email', headerName: 'Email', width: 200, editable: true},
     {
-        field: 'role', headerName: 'Role', width: 150,
+        field: 'role', headerName: 'Role', width: 200,
         renderCell: (params) => (
-            <StatusCellRole role={params.row.role}/>
+            <StatusCellRole role={params.value}/>
         ),
         renderEditCell: (params) => (
             <CustomSelectCell
-                value={params.value.code}
+                value={params.value}
                 onValueChange={(newValue) => {
-                    console.log(params.value.code, 111)
                     params.api.setEditCellValue({
-                        id: params._id,
+                        id: params.id,
                         field: params.field,
                         value: newValue,
                     });
@@ -118,7 +117,7 @@ export const getUserTableColumns = ({
         renderEditCell: (params) => (
             <CustomSelectCell
                 value={params.value}
-                onValueChange={params.api.setEditCellValue}
+                onValueChange={() => console.log(params.value)}
                 options={STATUS_OPTIONS}
             />
         ),

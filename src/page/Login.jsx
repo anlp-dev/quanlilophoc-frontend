@@ -23,6 +23,7 @@ import ReactLoading from 'react-loading';
 import {Message} from '../enums/Message.jsx'
 import Loading from "../components/loading/Loading.jsx";
 import Notification from "../components/notification/Notification.jsx";
+import {notifySuccess, notifyError, notifyInfo} from "../components/notification/ToastNotification.jsx";
 
 const fadeIn = keyframes(`from {
         opacity: 0;
@@ -96,11 +97,8 @@ const Login = () => {
     const [passwordError, setPasswordError] = React.useState(false);
     const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
     const [open, setOpen] = React.useState(false);
-    const [openMess, setOpenMess] = React.useState(false);
-    const [messLogin, setMessLogin] = React.useState(false);
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = React.useState(false);
-    const [isError, setIsError] = React.useState(false);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -108,13 +106,11 @@ const Login = () => {
 
     const handleClose = () => {
         setOpen(false);
-        setOpenMess(false);
     };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         if (emailError || passwordError) {
-
             return;
         }
         const data = new FormData(event.currentTarget);
@@ -127,22 +123,17 @@ const Login = () => {
             if(res_login.status === 200) {
                 localStorage.setItem('token', res_login?.token);
                 document.title = 'Đợi một chút ...'
-                setMessLogin(Message.LOGIN_SUCCESS);
-                setOpenMess(true);
+                notifySuccess(Message.LOGIN_SUCCESS);
                 setIsLoading(true);
-                setIsError(true)
                 setTimeout(() => {
                     setIsLoading(false)
                     navigate("/home");
                 }, 500)
             }
         } catch (e) {
-            setMessLogin(e.message)
-            setOpenMess(true)
-            setIsError(false);
+            notifyError(e.message)
             console.log(e.message)
         }
-
     };
 
     const validateInputs = () => {
@@ -189,12 +180,6 @@ const Login = () => {
                     <>
                         <Loading/>
                     </>}
-                <Notification
-                    open={openMess}
-                    message={messLogin}
-                    onClose={handleClose}
-                    error={isError}
-                />
                 <Card variant="outlined">
                     <Typography
                         component="h1"
@@ -268,7 +253,7 @@ const Login = () => {
                             variant="body2"
                             sx={{alignSelf: 'center'}}
                         >
-                            Forgot your password?
+                            Quên mật khẩu
                         </Link>
                     </Box>
                     <Divider>or</Divider>
@@ -279,7 +264,7 @@ const Login = () => {
                             onClick={() => alert('Sign in with Google')}
                             startIcon={<GoogleIcon/>}
                         >
-                            Sign in with Google
+                            Đăng nhập bằng Google
                         </Button>
                         <Button
                             fullWidth
@@ -287,7 +272,7 @@ const Login = () => {
                             onClick={() => alert('Sign in with Facebook')}
                             startIcon={<FacebookIcon/>}
                         >
-                            Sign in with Facebook
+                            Đăng nhập bằng Facebook
                         </Button>
                         <Typography sx={{textAlign: 'center'}}>
                             Don&apos;t have an account?{' '}
@@ -296,7 +281,7 @@ const Login = () => {
                                 variant="body2"
                                 sx={{alignSelf: 'center'}}
                             >
-                                Sign up
+                                Đăng ký
                             </Link>
                         </Typography>
                     </Box>

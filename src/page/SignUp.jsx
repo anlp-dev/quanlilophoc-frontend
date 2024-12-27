@@ -24,8 +24,9 @@ import authService from "../services/AuthService.jsx";
 import {useNavigate} from "react-router-dom";
 import {useEffect} from "react";
 import Loading from "../components/loading/Loading.jsx";
-import Notification from "../components/notification/Notification.jsx";
+import signUpValidate from "../validator/system/SignUpValidate.jsx";
 import apiConfig from "../configs/apiConfig.jsx";
+import {notifySuccess, notifyError, notifyInfo} from "../components/notification/ToastNotification.jsx";
 
 const fadeIn = keyframes(`from {
         opacity: 0;
@@ -105,6 +106,7 @@ const SignInContainer = styled(Stack)(({theme}) => ({
 }));
 
 const SignUp = () => {
+    const [passConfig, setPassConfig] = React.useState({});
     const [emailError, setEmailError] = React.useState(false);
     const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
     const [passwordError, setPasswordError] = React.useState(false);
@@ -117,95 +119,56 @@ const SignUp = () => {
     const [uNameErrorMess, setUNameMess] = React.useState('');
     const [rePassErr, setRePassErr] = React.useState(false);
     const [rePassErrMess, setRePassErrMess] = React.useState('')
-    const [openNotification, setOpenNotification] = React.useState(false);
-    const [messNotification, setMessNotification] = React.useState('');
     const [isLoading, setIsLoading] = React.useState(false)
     const [role, setRole] = React.useState([]);
     const [roleSelect, setRoleSelect] = React.useState('');
     const navigate = useNavigate();
 
-    const handleClose = () => {
-        setOpenNotification(false);
-    };
-
     useEffect(() => {
-        async function fetchData() {
-            try {
-                const res_data = await fetch(`${apiConfig.baseUrl}/role/`);
-                const data = await res_data.json();
-                setRole(data.data);
-            } catch (e) {
-
-            }
-        }
-
         fetchData();
+        fetchDataSystem();
     }, []);
 
+    async function fetchData() {
+        try {
+            const res_data = await fetch(`${apiConfig.baseUrl}/role/`);
+            const data = await res_data.json();
+            setRole(data.data);
+        } catch (e) {
+            throw new Error(e.message)
+        }
+    }
 
-    const validateInputs = () => {
+    const fetchDataSystem = async () => {
+        try{
+            const res = await authService.getConfig();
+            setPassConfig(res.data[0])
+        }catch (e) {
+            throw new Error(e.message)
+        }
+    }
+
+    const validateInputs = async () => {
         const email = document.getElementById('email');
         const password = document.getElementById('password');
         const name = document.getElementById('name');
         const repassword = document.getElementById('repassword');
         const username = document.getElementById('username');
         let isValid = true;
-
-        if (!username.value) {
-            setUserNameError(true);
-            setUNameMess('Tên đăng nhập không được để trống !')
+        const isValidateUserName = signUpValidate.userNameValidate(username, setUserNameError, setUNameMess);
+        const isValidateEmail = signUpValidate.emailValidate(email, setEmailError, setEmailErrorMessage)
+        const isValidatePass = signUpValidate.passWorldValidate(password, passConfig, setPasswordError, setPasswordErrorMessage, isValid);
+        const isValidateRePass = signUpValidate.rePassValidate(repassword, password, setRePassErr, setRePassErrMess)
+        const isValidateName = signUpValidate.nameValidate(name, setNameError, setNameErrorMessage)
+        if(!isValidateName || !isValidatePass || !isValidateEmail || !isValidateRePass || !isValidateUserName){
             isValid = false;
-        } else {
-            setUserNameError(false)
-            setUNameMess('')
         }
-
-        if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
-            setEmailError(true);
-            setEmailErrorMessage('Please enter a valid email address.');
-            isValid = false;
-        } else {
-            setEmailError(false);
-            setEmailErrorMessage('');
-        }
-
-
-        if (!password.value || password.value.length < 8) {
-            setPasswordError(true);
-            setPasswordErrorMessage('Mật khẩu phải lớn hơn 8 kí tự !');
-            isValid = false;
-        } else {
-            setPasswordError(false);
-            setPasswordErrorMessage('');
-        }
-        if (!repassword?.value) {
-            setRePassErr(true);
-            setRePassErrMess('Mật khẩu nhập lại không được để trống!');
-            isValid = false;
-        } else if (repassword?.value !== password?.value) {
-            setRePassErr(true);
-            setRePassErrMess('Mật khẩu nhập lại không chính xác !');
-            isValid = false;
-        } else {
-            setRePassErr(false);
-            setRePassErrMess(' ');
-        }
-
-        if (!name.value || name.value.length < 1) {
-            setNameError(true);
-            setNameErrorMessage('Name is required.');
-            isValid = false;
-        } else {
-            setNameError(false);
-            setNameErrorMessage('');
-        }
-
         return isValid;
     };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        if (nameError || emailError || passwordError) {
+        if (nameError || emailError || passwordError || rePassErr) {
             return;
         }
         const data = new FormData(event.currentTarget);
@@ -216,18 +179,15 @@ const SignUp = () => {
             }
             const res_signin = await authService.signup(data);
             if (res_signin) {
-                setOpenNotification(true)
-                setMessNotification('Đăng ký thành công!');
+                notifySuccess('Đăng ký thành công!!!')
                 setTimeout(() => {
                     navigate("/");
                 }, 500);
             }
             setIsLoading(false);
         } catch (e) {
-            setOpenNotification(true)
-            setMessNotification(e.message)
+            notifyError(e.message)
         }
-
 
     };
     return (
@@ -239,11 +199,7 @@ const SignUp = () => {
                         <>
                             <Loading/>
                         </>}
-                    <Notification
-                        open={openNotification}
-                        message={messNotification}
-                        onClose={handleClose}
-                    />
+
                     <Typography
                         component="h1"
                         variant="h4"
@@ -326,7 +282,6 @@ const SignUp = () => {
                                         <InputLabel id="roleId">Bạn là</InputLabel>
                                         <Select
                                             label="Bạn là"
-                                            id="roleId"
                                             name="roleId"
                                             value={roleSelect}
                                             error={roleError}
@@ -334,7 +289,7 @@ const SignUp = () => {
                                             onChange={(e) => setRoleSelect(e.target.value)}
                                         >
                                             {role.map(r => (
-                                                <MenuItem key={r._id} value={r._id}>{r.name}</MenuItem>
+                                                <MenuItem id={'roleId'} key={r._id} value={r._id}>{r.name}</MenuItem>
                                             ))}
                                         </Select>
                                         {roleError && (
@@ -352,7 +307,7 @@ const SignUp = () => {
                                             placeholder="••••••"
                                             type="password"
                                             id="repassword"
-                                            autoComplete="new-password"
+                                            autoComplete="repassword"
                                             variant="outlined"
                                             error={rePassErr}
                                             helperText={rePassErrMess}

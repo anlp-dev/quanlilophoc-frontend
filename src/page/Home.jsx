@@ -72,9 +72,24 @@ function Home() {
                     boxShadow: theme.shadows[5],
                 }}
             >
-                <Typography variant="h4" fontWeight="bold" color="primary" gutterBottom>
-                    Trang chủ
-                </Typography>
+                <Box
+                    sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        maxHeight: 60,
+                        flexWrap: "wrap",
+                        gap: 2,
+                        padding: "1rem",
+                        backgroundColor: "#f9f9f9",
+                        borderRadius: "15px",
+                        boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+                    }}
+                >
+                    <Typography variant="h5" fontWeight="bold" color="primary" gutterBottom>
+                        Trang chủ
+                    </Typography>
+                </Box>
                 <Grid container spacing={4} sx={{mt: 0, px: 4}}>
                     <Grid item xs={12} md={6} lg={3}>
                         <motion.div

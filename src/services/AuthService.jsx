@@ -40,11 +40,10 @@ const authService = {
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({username, password, fullname, email, roleId}),
             })
-            if (!res.ok) {
-                throw new Error('Đăng kí thất bại !');
-            }
             const data = await res.json();
-            console.log(data);
+            if (!res.ok) {
+                throw new Error(data.message);
+            }
             return data;
         } catch (e) {
             throw new Error(e);
@@ -54,6 +53,18 @@ const authService = {
         const token = localStorage.getItem('token');
         return !!token;
     },
+
+    async getConfig(){
+        try{
+            const res = await fetch(`${apiConfig.baseUrl}/auth/config/password`, {
+                method: "GET",
+            })
+            const data = await res.json();
+            return data;
+        }catch (e) {
+            throw new Error(e);
+        }
+    }
 }
 
 export default authService;

@@ -22,6 +22,7 @@ import Loading from "../components/loading/Loading.jsx";
 import Notification from "../components/notification/Notification.jsx";
 import {MESSAGE_ERROR, Message} from "../enums/Message.jsx";
 import Account from "../components/Profile/Account.jsx";
+import {notifySuccess, notifyError, notifyInfo} from "../components/notification/ToastNotification.jsx";
 
 // Styled Button
 const StyledButton = styled(Button)(({theme}) => ({
@@ -46,8 +47,6 @@ const variants = {
 const Profile = () => {
     const [user, setUser] = useState({});
     const [openModal, setOpenModal] = useState(false);
-    const [openMess, setOpenMess] = useState(false);
-    const [messNotification, setMessNotification] = useState('');
     const [isLoading, setIsLoading] = React.useState(false);
     const theme = useTheme();
 
@@ -73,21 +72,15 @@ const Profile = () => {
         try {
             const data = await userService.loadDataUser(token);
             setUser(data.data);
-            setOpenMess(true)
-            setMessNotification(Message.UPDATE_PROFILE);
+            notifySuccess(Message.UPDATE_PROFILE);
             setIsLoading(true);
             setTimeout(() => {
-                setOpenMess(false)
-                setMessNotification('');
                 setIsLoading(false);
             }, 500);
         } catch (e) {
-            setOpenMess(true)
-            setMessNotification(MESSAGE_ERROR.UPDATE_PROFILE);
+            notifyError(MESSAGE_ERROR.UPDATE_PROFILE)
             setIsLoading(true);
             setTimeout(() => {
-                setOpenMess(false)
-                setMessNotification('');
                 setIsLoading(false);
             }, 500);
             console.error('Network error:', e);
@@ -124,12 +117,6 @@ const Profile = () => {
                         <>
                             <Loading/>
                         </>}
-                    <Notification
-                        open={openMess}
-                        message={messNotification}
-                        onClose={handleClose}
-                    />
-
                     <Grid container spacing={3} justifyContent="center">
                         <Grid
                             item
