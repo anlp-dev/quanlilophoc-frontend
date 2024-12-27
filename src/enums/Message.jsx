@@ -15,3 +15,7 @@ export const MESSAGE_ERROR = {
     GENDER_REQUIRED: 'Vui lòng không để trống giới tính!!!',
     UPDATE_PROFILE: 'Cập nhật thông tin của bạn lỗi !!!',
 }
+
+export const ERROR = {
+    UNAUTHOR: 'Bạn không có quyền tuy cập chức năng này !!!'
+}

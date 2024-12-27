@@ -19,6 +19,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import manageRole from "../../../services/admin/ManageRole.jsx";
 import Loading from "../../loading/Loading.jsx";
 import Notification from "../../notification/Notification.jsx";
+import {notifySuccess, notifyError, notifyInfo} from "../../notification/ToastNotification.jsx";
 
 const TableRoleManage = ({isOpen, handleClosePermissionsModal, permissionIds}) => {
     const [permissions, setPermissions] = useState([]);
@@ -83,17 +84,12 @@ const TableRoleManage = ({isOpen, handleClosePermissionsModal, permissionIds}) =
         try {
             setPermissions(permissions.filter((p) => p._id !== permissionId));
             await manageRole.removePermission(permissionId);
-            setOpen(true)
-            setOpenMess(true)
-            setIsError(true)
-            setMess("Xoá thành công !!!")
+            notifySuccess("Xoá thành công !!!")
         } catch (e) {
-            setOpen(true)
-            setOpenMess(true)
-            setMess(e.message)
-            setIsError(false)
+            notifyError(e.message)
+        }finally {
+            setLoading(false)
         }
-        setLoading(false)
     };
 
     const handleClose = () => {
@@ -105,9 +101,10 @@ const TableRoleManage = ({isOpen, handleClosePermissionsModal, permissionIds}) =
         setLoading(true);
         try {
             await manageRole.savePermission(permissions)
+            notifySuccess("Lưu thành công !!!");
             handleClosePermissionsModal();
         } catch (e) {
-            throw new Error(e);
+            notifyError(e.message)
         }
         setLoading(false)
     }
@@ -116,19 +113,19 @@ const TableRoleManage = ({isOpen, handleClosePermissionsModal, permissionIds}) =
         {
             field: "name",
             headerName: "Tên quyền hạn",
-            flex: 1,
+            flex: 2,
             editable: true,
         },
         {
             field: "description",
             headerName: "Mô tả chi tiết",
-            flex: 1,
+            flex: 2,
             editable: true,
         },
         {
             field: "code",
             headerName: "Mã quyền",
-            flex: 1,
+            flex: 2,
             editable: true,
         },
         {

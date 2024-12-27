@@ -30,6 +30,7 @@ import manageRole from "../../services/admin/ManageRole.jsx";
 import Loading from "../loading/Loading.jsx";
 import AddRoleModal from "./modal/AddRoleModal.jsx";
 import Notification from "../notification/Notification.jsx";
+import {notifySuccess, notifyError, notifyInfo} from "../../components/notification/ToastNotification.jsx";
 
 
 const RoleManagement = () => {
@@ -116,22 +117,16 @@ const RoleManagement = () => {
     };
 
     const handleSavePermissions = async () => {
-        console.log("Permissions saved for:", selectedRole);
         setLoading(true)
         try {
             await manageRole.saveRolePermission(selectedRole);
             fetchData();
-            setOpenMess(true)
-            setOpen(true);
-            setMess("Lưu thành công !!!")
-            setIsError(true);
+            notifySuccess("Lưu thành công !!!")
         } catch (e) {
-            setOpenMess(true)
-            setOpen(true);
-            setMess("Thất bại !!!")
-            setIsError(false);
+            notifyError("Thất bại !!!")
+        }finally {
+            setLoading(false)
         }
-        setLoading(false)
     };
 
     const onSave = async (role) => {
@@ -156,7 +151,7 @@ const RoleManagement = () => {
                     error={isError}
                 />
                 <Paper elevation={4}
-                       sx={{p: 4, m: "auto", marginTop: 1, width: "100%", maxWidth: 1550, borderRadius: 3}}>
+                       sx={{p: 4, m: "auto", marginTop: 1, width: "100%", maxWidth: 1550, borderRadius: 3, height: "98vh"}}>
                     {loading ? <Loading/> : ''}
                     <Typography variant="h4" fontWeight="bold" color="primary" gutterBottom>
                         Quản lý Vai trò và Quyền hạn

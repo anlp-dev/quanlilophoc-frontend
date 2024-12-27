@@ -1,6 +1,7 @@
 import Box from '@mui/material/Box';
 import ReactLoading from "react-loading";
 import * as React from "react";
+import {RingLoader} from "react-spinners";
 
 const Loading = () => {
     return (
@@ -21,6 +22,10 @@ const Loading = () => {
             >
                 {/*<CircularProgress size={40}/>*/}
                 <ReactLoading type="cylon" color="white" height={100} width={100}/>
+                {/*<RingLoader*/}
+                {/*    color="#FFFFE0"*/}
+                {/*    size={150}*/}
+                {/*/>*/}
             </Box>
         </>
     )

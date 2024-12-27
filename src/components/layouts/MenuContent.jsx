@@ -43,10 +43,6 @@ const mainListItems = [
         icon: <ClassIcon/>,
         link: Path.CLASS,
         role: ['admin', 'teacher', 'student'],
-        children: [
-            {text: 'Lớp 10A1', icon: <RoomIcon/>, link: '/class/10A1'},
-            {text: 'Lớp 11B2', icon: <RoomIcon/>, link: '/class/11B2'},
-        ]
     },
     {
         text: 'Thống kê',

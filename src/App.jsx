@@ -7,7 +7,7 @@ import SideMenu from "./components/layouts/SideMenu.jsx";
 import PrivateRoute from "./security/PrivateRoute.jsx";
 import Profile from "./page/Profile.jsx";
 import Main from "./page/Main.jsx";
-import Class from "./page/Class.jsx";
+import Class from "./page/class/Class.jsx";
 import Dashboard from "./page/Dashboard.jsx";
 import NotFoundPage from "./page/404.jsx";
 import AccessDeniedPage from "./page/403.jsx";
@@ -23,12 +23,14 @@ import QuanLyQuyenTruyCap from "./components/admin/QuanLyQuyenTruyCap.jsx";
 import BaoTri from "./components/admin/BaoTri.jsx";
 import BaoMat from "./components/admin/BaoMat.jsx";
 import VerifyEmailPage from "./page/VerifyEmail.jsx";
+import ToastNotification from "./components/notification/ToastNotification.jsx";
 
 function App() {
 
 
     return (
         <>
+            <ToastNotification />
             <BrowserRouter>
                 <Routes>
                     <Route path="/verifyEmail" element={<VerifyEmailPage/>}/>

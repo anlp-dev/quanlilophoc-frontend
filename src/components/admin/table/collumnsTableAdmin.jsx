@@ -10,24 +10,23 @@ import {STATUS, STATUS_OPTIONS, ROLE_OPTIONS} from "../../../enums/Status.jsx";
 
 const CustomSelectCell = ({value, onValueChange, options}) => (
     <Select
-        value={value || ''}
+        value={value}
         onChange={(e) => onValueChange(e.target.value)}
         fullWidth
         size="small"
     >
         {options.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
+            <MenuItem key={option.code} value={option.code}>
                 <Box sx={{display: 'flex', alignItems: 'center'}}>
                     <Box
                         sx={{
                             width: 10,
                             height: 10,
                             borderRadius: '50%',
-                            backgroundColor: option.color,
                             marginRight: 1,
                         }}
                     />
-                    <span>{option.label}</span>
+                    <span>{option.name}</span>
                 </Box>
             </MenuItem>
         ))}
@@ -50,15 +49,12 @@ const StatusCell = ({statusCode}) => {
                     marginRight: 1,
                 }}
             />
-            <span>{status.label}</span>
+            <span>{status.name}</span>
         </Box>
     );
 };
 
 const StatusCellRole = ({role}) => {
-    const roleName =
-        Object.values(ROLE_OPTIONS).find((s) => s.value === role?.code) || STATUS.UNKNOWN;
-
     return (
         <Box sx={{display: 'flex', alignItems: 'center'}}>
             <Box
@@ -69,7 +65,7 @@ const StatusCellRole = ({role}) => {
                     marginRight: 1,
                 }}
             />
-            <span>{roleName.label}</span>
+            <span>{role.name}</span>
         </Box>
     );
 };
@@ -81,21 +77,28 @@ export const getUserTableColumns = ({
                                         handleCancelClick,
                                         handleEditClick,
                                         handleDeleteClick,
+                                        role,
                                     }) => [
     {field: 'serial', headerName: "STT", width: 80},
     {field: 'username', headerName: 'Tên đăng nhập', width: 150, editable: true},
     {field: 'fullname', headerName: 'Họ và tên', width: 200, editable: true},
     {field: 'email', headerName: 'Email', width: 200, editable: true},
     {
-        field: 'role', headerName: 'Role', width: 150,
+        field: 'role', headerName: 'Role', width: 200,
         renderCell: (params) => (
-            <StatusCellRole role={params.row.role}/>
+            <StatusCellRole role={params.value}/>
         ),
         renderEditCell: (params) => (
             <CustomSelectCell
-                value={params.value?.code}
-                onValueChange={params.api.setEditCellValue}
-                options={ROLE_OPTIONS}
+                value={params.value}
+                onValueChange={(newValue) => {
+                    params.api.setEditCellValue({
+                        id: params.id,
+                        field: params.field,
+                        value: newValue,
+                    });
+                }}
+                options={role}
             />
         ),
         editable: true
@@ -114,7 +117,7 @@ export const getUserTableColumns = ({
         renderEditCell: (params) => (
             <CustomSelectCell
                 value={params.value}
-                onValueChange={params.api.setEditCellValue}
+                onValueChange={() => console.log(params.value)}
                 options={STATUS_OPTIONS}
             />
         ),

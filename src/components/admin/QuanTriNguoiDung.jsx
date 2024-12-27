@@ -26,11 +26,13 @@ import {getUserTableColumns} from "./table/collumnsTableAdmin.jsx";
 import {useEffect} from 'react';
 import userByAdminService from '../../services/admin/UserByAdminService.jsx';
 import {EditToolbar} from '../admin/table/toolbars/editToolBars.jsx'
+import apiConfig from "../../configs/apiConfig.jsx";
 
 export default function QuanTriNguoiDung() {
     const [rows, setRows] = React.useState([]);
     const [rowModesModel, setRowModesModel] = React.useState({});
     const [searchFilters, setSearchFilters] = React.useState({});
+    const [role, setRole] = React.useState([]);
     const theme = useTheme();
 
 
@@ -59,7 +61,23 @@ export default function QuanTriNguoiDung() {
             }
         };
         fetchData();
+        getAllRow();
     }, []);
+
+    const getAllRow = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            const res = await fetch(`${apiConfig.baseUrl}/admin/roles-manage`, {
+                method: 'GET',
+                headers: apiConfig.getAuthHeaders(token)
+            })
+            const data = await res.json();
+            console.log(data);
+            setRole(data?.data);
+        }catch (e) {
+            throw new Error(e);
+        }
+    }
 
     const handleRowEditStop = (params, event) => {
         if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -73,6 +91,7 @@ export default function QuanTriNguoiDung() {
 
     const handleSaveClick = (id) => () => {
         setRowModesModel({...rowModesModel, [id]: {mode: GridRowModes.View}});
+        console.log(rows.filter((row) => row.id === id));
     };
 
     const handleDeleteClick = (id) => () => {
@@ -123,7 +142,8 @@ export default function QuanTriNguoiDung() {
         handleSaveClick,
         handleCancelClick,
         handleEditClick,
-        handleDeleteClick
+        handleDeleteClick,
+        role
     })
 
     return (
@@ -135,9 +155,8 @@ export default function QuanTriNguoiDung() {
                     m: 'auto',
                     marginTop: 1,
                     width: '100%',
-                    height: '100%',
+                    height: "98vh",
                     maxWidth: 1550,
-                    maxHeight: 2000,
                     borderRadius: 3,
                     boxShadow: theme.shadows[5],
                 }}

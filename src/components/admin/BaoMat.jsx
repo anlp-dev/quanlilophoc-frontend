@@ -13,6 +13,7 @@ const Security = () => {
                     m: 'auto',
                     marginTop: 1,
                     width: '100%',
+                    height: "98vh",
                     maxWidth: 1550,
                     borderRadius: 3,
                     boxShadow: theme.shadows[5],
