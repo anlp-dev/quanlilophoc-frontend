@@ -7,7 +7,7 @@ import SideMenu from "./components/layouts/SideMenu.jsx";
 import PrivateRoute from "./security/PrivateRoute.jsx";
 import Profile from "./page/Profile.jsx";
 import Main from "./page/Main.jsx";
-import Class from "./page/class/Class.jsx";
+import Class from "./page/class/lophoc/Class.jsx";
 import Dashboard from "./page/Dashboard.jsx";
 import NotFoundPage from "./page/404.jsx";
 import AccessDeniedPage from "./page/403.jsx";
@@ -24,6 +24,8 @@ import BaoTri from "./components/admin/BaoTri.jsx";
 import BaoMat from "./components/admin/BaoMat.jsx";
 import VerifyEmailPage from "./page/VerifyEmail.jsx";
 import ToastNotification from "./components/notification/ToastNotification.jsx";
+import LopHoc from "./page/class/lophoc-ct/LopHoc.jsx";
+import MainClass from "./page/class/MainClass.jsx";
 
 function App() {
 
@@ -44,7 +46,10 @@ function App() {
                         <Route element={<Main />}>
                             <Route path="/home" element={<Home />} />
                             <Route path="/profile" element={<Profile />} />
-                            <Route path="/class" element={<Class/>}/>
+                            <Route path="/class" element={<MainClass/>}>
+                                <Route path="" element={<Class />} />
+                                <Route path="detail" element={<LopHoc/>}/>
+                            </Route>
                             <Route path="/dashboard" element={<Dashboard/>}/>
                             <Route path="/admin" element={<Admin/>}>
                                 <Route path="user" element={<QuanTriNguoiDung/>}/>

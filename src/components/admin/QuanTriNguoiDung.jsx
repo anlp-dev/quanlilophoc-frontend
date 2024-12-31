@@ -72,7 +72,6 @@ export default function QuanTriNguoiDung() {
                 headers: apiConfig.getAuthHeaders(token)
             })
             const data = await res.json();
-            console.log(data);
             setRole(data?.data);
         }catch (e) {
             throw new Error(e);
@@ -91,7 +90,6 @@ export default function QuanTriNguoiDung() {
 
     const handleSaveClick = (id) => () => {
         setRowModesModel({...rowModesModel, [id]: {mode: GridRowModes.View}});
-        console.log(rows.filter((row) => row.id === id));
     };
 
     const handleDeleteClick = (id) => () => {

@@ -33,25 +33,29 @@ import SafetyCheckIcon from '@mui/icons-material/SafetyCheck';
 
 const mainListItems = [
     {
+        id: 1,
         text: 'Trang chủ',
         icon: <HomeRoundedIcon/>,
         link: Path.HOME,
         role: ['admin', 'teacher', 'student']
     },
     {
-        text: 'Lớp học',
+        id: 2,
+        text: 'Quản lí lớp học',
         icon: <ClassIcon/>,
         link: Path.CLASS,
         role: ['admin', 'teacher', 'student'],
     },
     {
+        id: 3,
         text: 'Thống kê',
         icon: <DashboardIcon/>,
         link: Path.DASHBOARD,
         role: ['admin']
     },
     {
-        text: 'Analytics',
+        id: 5,
+        text: 'Danh sách lớp học của bạn',
         icon: <AnalyticsRoundedIcon/>,
         role: ['admin', 'teacher'],
         children: [
@@ -60,6 +64,17 @@ const mainListItems = [
         ]
     },
     {
+        id: 6,
+        text: 'Bài tập',
+        icon: <AnalyticsRoundedIcon/>,
+        role: ['admin', 'teacher'],
+        children: [
+            {text: 'Tổng quan', link: '/analytics/overview'},
+            {text: 'Chi tiết', link: '/analytics/detail'},
+        ]
+    },
+    {
+        id: 7,
         text: 'Quản lý hệ thống',
         icon: <SettingsSystemDaydreamIcon/>,
         role: ['admin'],
@@ -76,13 +91,14 @@ const mainListItems = [
         ]
     },
     {
+        id: 8,
         text: 'Tasks',
         icon: <AssignmentRoundedIcon/>,
         role: ['teacher', 'student']
     },
 ];
 
-export default function MenuContent(role) {
+export default function MenuContent(role, dataMenu = null) {
     const location = useLocation();
     const [open, setOpen] = React.useState({});
 

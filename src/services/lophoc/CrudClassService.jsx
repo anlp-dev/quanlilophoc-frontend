@@ -55,11 +55,49 @@ const crudClassService = {
 
         }
     },
-    async update () {
+    async update (data_req) {
+        try{
+            const token = localStorage.getItem("token");
+            if(!token){
+                throw new Error(ERROR.UNAUTHOR)
+            }
+            const res = await fetch(`${apiConfig.baseUrl}/class/update`, {
+                method: 'PUT',
+                headers: apiConfig.getAuthHeaders(token),
+                body: JSON.stringify(data_req)
+            })
+            const data = await res.json();
+            if(!res.ok){
+                throw new Error(data.message);
+            }
+            return data;
+        }catch (e) {
+            throw new Error(e.message);
+        }finally {
 
+        }
     },
-    async delete () {
+    async delete (data_req) {
+        try{
+            const token = localStorage.getItem("token")
+            if(!token){
+                throw new Error(ERROR.UNAUTHOR)
+            }
+            const res = await fetch(`${apiConfig.baseUrl}/class/delete`, {
+                method: 'DELETE',
+                headers: apiConfig.getAuthHeaders(token),
+                body: JSON.stringify(data_req)
+            })
+            const data = await res.json();
+            if(!res.ok){
+                throw new Error(data.message);
+            }
+            return data;
+        }catch (e) {
+            throw new Error(e.message)
+        }finally {
 
+        }
     }
 }
 
